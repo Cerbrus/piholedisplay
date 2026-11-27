@@ -1,5 +1,5 @@
 {
-    "interval_minutes": 10,
+    "interval_minutes": 30,
     "retry_seconds": 60,
     "draw_inverted": true,
     "log_level": "INFO",
