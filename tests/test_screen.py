@@ -9,6 +9,7 @@ from piholedisplay.icons import ICONS, SIZE
 from piholedisplay.model import Frame
 
 FRAMES = demo_frames()
+PADDING = 6
 
 
 def ink(image, box):
@@ -64,24 +65,24 @@ def test_lone_marker_sits_against_the_divider():
     assert ink(screen.render(voltage_only).red, slot)
 
 
-def test_bottom_right_corner_stays_empty():
-    corner = (screen.STAMP_RIGHT, screen.FOOTER_Y - 1, WIDTH, HEIGHT)
+def test_corner_padding_keeps_the_bottom_right_corner_empty():
+    corner = (screen.STAMP_RIGHT - PADDING, screen.FOOTER_Y - 1, WIDTH, HEIGHT)
 
     for frame in FRAMES.values():
-        canvas = screen.render(frame)
+        canvas = screen.render(frame, PADDING)
 
         assert ink(canvas.black, corner) == 0
         assert ink(canvas.red, corner) == 0
 
 
-def test_edge_stamp_ends_at_the_right_margin_and_changes_nothing_else():
-    panel, edge = screen.render(FRAMES['normal-1']), screen.render(FRAMES['normal-1'], screen.EDGE_STAMP_RIGHT)
+def test_refresh_time_ends_at_the_right_margin_unless_padded():
+    plain, padded = screen.render(FRAMES['normal-1']), screen.render(FRAMES['normal-1'], PADDING)
     above = (0, 0, WIDTH, screen.FOOTER_Y - 1)
-    margin = (screen.EDGE_STAMP_RIGHT, 0, WIDTH, HEIGHT)
+    margin = (screen.STAMP_RIGHT, 0, WIDTH, HEIGHT)
 
-    assert ink(edge.black, (screen.STAMP_RIGHT, screen.FOOTER_Y - 1, screen.EDGE_STAMP_RIGHT, HEIGHT))
-    assert ink(edge.black, margin) == 0
-    assert panel.black.crop(above).tobytes() == edge.black.crop(above).tobytes()
+    assert ink(plain.black, (screen.STAMP_RIGHT - PADDING, screen.FOOTER_Y - 1, screen.STAMP_RIGHT, HEIGHT))
+    assert ink(plain.black, margin) == 0
+    assert plain.black.crop(above).tobytes() == padded.black.crop(above).tobytes()
 
 
 def test_alternate_frame_changes_only_the_lower_grid_rows():

@@ -13,8 +13,7 @@ CHART_WIDTH = WIDTH - 4
 BAR_STEP = 3
 BAR_WIDTH = 2
 FOOTER_Y = 94
-STAMP_RIGHT = WIDTH - 8
-EDGE_STAMP_RIGHT = WIDTH - 2
+STAMP_RIGHT = WIDTH - 2
 OVERLAY_TOP = 63
 OVERLAY_BOTTOM = 79
 OVERLAY_MARGIN = 1
@@ -75,7 +74,7 @@ def chart_columns(history, count):
     return columns, per_column
 
 
-def render(frame, stamp_right=STAMP_RIGHT):
+def render(frame, corner_padding=0):
     canvas = Canvas()
     _hero(canvas, frame)
     canvas.line((DIVIDER_X, 2), (DIVIDER_X, 48))
@@ -83,7 +82,7 @@ def render(frame, stamp_right=STAMP_RIGHT):
     canvas.line((CHART_LEFT, CHART_TOP - 2), (CHART_LEFT + CHART_WIDTH - 1, CHART_TOP - 2))
     hours = _chart(canvas, frame.pihole.history if frame.pihole else ())
     canvas.line((CHART_LEFT, CHART_TOP + CHART_HEIGHT + 2), (CHART_LEFT + CHART_WIDTH - 1, CHART_TOP + CHART_HEIGHT + 2))
-    _footer(canvas, frame, hours, stamp_right)
+    _footer(canvas, frame, hours, STAMP_RIGHT - corner_padding)
     if frame.overlay:
         _overlay(canvas, frame.overlay)
     return canvas

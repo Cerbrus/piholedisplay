@@ -11,6 +11,7 @@ class Config:
     interval_minutes: float
     retry_seconds: float
     draw_inverted: bool
+    corner_padding: int
     log_level: str
     api_url: str
     password_file: str | None
@@ -39,6 +40,7 @@ def load_config(directory):
         interval_minutes=values['interval_minutes'],
         retry_seconds=values['retry_seconds'],
         draw_inverted=values['draw_inverted'],
+        corner_padding=values['corner_padding'],
         log_level=values['log_level'],
         api_url=values['pihole']['api_url'],
         password_file=values['pihole']['password_file'],

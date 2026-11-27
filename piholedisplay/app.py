@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from .config import load_config
 from .model import Frame, Overlay
 from .pihole import PiholeClient, PiholeError
-from .screen import EDGE_STAMP_RIGHT, phrase_fits, render
+from .screen import phrase_fits, render
 from .system import read_system
 from .web import FrameServer
 
@@ -158,7 +158,7 @@ class App:
         )
 
     def _show(self, frame):
-        self.display.show(render(frame), self.config.draw_inverted)
+        self.display.show(render(frame, self.config.corner_padding), self.config.draw_inverted)
         self.frame = frame
         self.refreshes += 1
         log.info('Rendered at %s', frame.refreshed.strftime('%H:%M:%S'))
@@ -169,7 +169,7 @@ class App:
             if not self.snapshot or (now - self.snapshot_taken).total_seconds() >= self.config.http_max_age_seconds:
                 frame = self._frame(now, self._fetch(now), bool(self.snapshots % 2))
                 buffer = io.BytesIO()
-                render(frame, EDGE_STAMP_RIGHT).to_rgb(SNAPSHOT_SCALE).save(buffer, 'PNG')
+                render(frame).to_rgb(SNAPSHOT_SCALE).save(buffer, 'PNG')
                 self.snapshot = buffer.getvalue()
                 self.snapshot_taken = now
                 self.snapshots += 1
@@ -192,7 +192,8 @@ class App:
         if self.frame and not self.once and self.config.interval_minutes > 0:
             stopped = Overlay('pause', 'Stopped', self.clock().strftime('%d-%m %H:%M'))
             try:
-                self.display.show(render(replace(self.frame, overlay=stopped)), self.config.draw_inverted)
+                canvas = render(replace(self.frame, overlay=stopped), self.config.corner_padding)
+                self.display.show(canvas, self.config.draw_inverted)
             except Exception:
                 log.exception('Could not draw the stopped frame')
         if self.client:

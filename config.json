@@ -2,6 +2,7 @@
     "interval_minutes": 30,
     "retry_seconds": 60,
     "draw_inverted": true,
+    "corner_padding": 0,
     "log_level": "INFO",
     "pihole": {
         "api_url": "http://localhost/api",
