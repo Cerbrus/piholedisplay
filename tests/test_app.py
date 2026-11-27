@@ -90,10 +90,10 @@ def run(config_dir, results, rounds, **options):
 def test_renders_every_interval_and_alternates(config_dir):
     app, client, frames = run(config_dir, [demo_pihole()], rounds=3)
 
-    assert [frame.refreshed for frame in frames] == [START + timedelta(minutes=10 * index) for index in range(3)]
+    assert [frame.refreshed for frame in frames] == [START + timedelta(minutes=30 * index) for index in range(3)]
     assert [frame.alternate for frame in frames] == [False, True, False]
     assert all(frame.overlay is None for frame in frames)
-    assert app.stop.waits == [600, 600, 600]
+    assert app.stop.waits == [1800, 1800, 1800]
 
 
 def test_stop_draws_the_stopped_frame_and_logs_out(config_dir):
@@ -109,7 +109,7 @@ def test_failure_shows_no_data_once_and_retries_every_minute(config_dir):
     assert [frame.overlay.title if frame.overlay else None for frame in frames] == [None, 'No data']
     assert frames[1].overlay.detail == 'since 12:00'
     assert frames[1].pihole == demo_pihole()
-    assert app.stop.waits == [600, 60, 60, 60]
+    assert app.stop.waits == [1800, 60, 60, 60]
 
 
 def test_recovery_redraws_without_waiting_for_the_interval(config_dir):
@@ -151,7 +151,7 @@ def test_local_config_overrides_nested_values(config_dir):
     assert config.api_url == 'http://other/api'
     assert config.password_file == '/etc/pihole/cli_pw'
     assert not config.draw_inverted
-    assert config.interval_minutes == 10
+    assert config.interval_minutes == 30
 
 
 def test_shipped_phrases_are_unique_and_fit_a_six_digit_count():

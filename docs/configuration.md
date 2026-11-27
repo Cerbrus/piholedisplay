@@ -2,11 +2,11 @@
 
 Settings live in `config.json` at the repository root. The file is read again before every refresh, so a change takes effect without a restart.
 
-`config.json` is tracked and gets replaced by every update. Put your own values in `config.local.json` next to it: it is ignored by git and is laid over `config.json`, key by key. For example, to refresh every 5 minutes and turn the screen around:
+`config.json` is tracked and gets replaced by every update. Put your own values in `config.local.json` next to it: it is ignored by git and is laid over `config.json`, key by key. For example, to refresh every 10 minutes and turn the screen around:
 
 ```json
 {
-    "interval_minutes": 5,
+    "interval_minutes": 10,
     "draw_inverted": false
 }
 ```
@@ -15,7 +15,7 @@ Settings live in `config.json` at the repository root. The file is read again be
 
 | Setting | Default | Function |
 |---|---|---|
-| `interval_minutes` | `10` | Minutes between screen refreshes. `0` draws one frame and exits. |
+| `interval_minutes` | `30` | Minutes between screen refreshes. A refresh flashes the panel for about 15 seconds and wears it a little, so shorter is not better. `0` draws one frame and exits. |
 | `retry_seconds` | `60` | How often Pi-hole is asked again while it does not answer. The screen is redrawn once when the data is lost and once when it is back, not on every retry. |
 | `draw_inverted` | `true` | `true` or `false` turns the picture upside down, depending on how the Pi is mounted. |
 | `log_level` | `"INFO"` | `DEBUG`, `INFO`, `WARNING` or `ERROR`. The log goes to the journal: `journalctl -u pihole-display`. |
