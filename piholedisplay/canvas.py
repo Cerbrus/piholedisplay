@@ -16,7 +16,7 @@ PAPER = 255
 @cache
 def font(size, bold=False):
     name = 'DejaVuSansMono-Bold.ttf' if bold else 'DejaVuSansMono.ttf'
-    return ImageFont.truetype(str(FONTS / name), size)
+    return ImageFont.truetype(str(FONTS / name), size, layout_engine=ImageFont.Layout.BASIC)
 
 
 def text_width(message, size=10, bold=False):

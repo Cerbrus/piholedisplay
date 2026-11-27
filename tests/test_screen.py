@@ -3,7 +3,7 @@ from dataclasses import replace
 import pytest
 
 from piholedisplay import screen
-from piholedisplay.canvas import HEIGHT, WIDTH
+from piholedisplay.canvas import HEIGHT, WIDTH, text_width
 from piholedisplay.demo import demo_frames, demo_pihole, demo_system
 from piholedisplay.icons import ICONS, SIZE
 from piholedisplay.model import Frame
@@ -109,6 +109,11 @@ def test_durations():
 def test_phrase_fit_depends_on_the_blocked_count():
     assert screen.phrase_fits(12431, 'Yeeted')
     assert not screen.phrase_fits(1234567, 'Banhammered')
+
+
+@pytest.mark.parametrize(('size', 'bold', 'advance'), [(8, False, 5), (9, False, 5), (10, False, 6), (9, True, 5), (24, True, 14)])
+def test_font_advances_are_whole_pixels_on_every_platform(size, bold, advance):
+    assert text_width('0' * 10, size, bold) == advance * 10
 
 
 def test_icons_are_square_bitmaps_with_a_meaning():
