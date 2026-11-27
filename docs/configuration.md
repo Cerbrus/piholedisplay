@@ -23,7 +23,7 @@ Settings live in `config.json` at the repository root. The file is read again be
 | `pihole.password_file` | `"/etc/pihole/cli_pw"` | File holding the password for the API. The default is the CLI password Pi-hole writes itself; the user running the display has to be in the `pihole` group to read it. `null` for a Pi-hole without a password. |
 | `http.port` | `8081` | Port on which the screen is served as a picture, at `/screen.png`. `0` serves nothing. |
 | `http.max_age_seconds` | `120` | How long a served picture is reused before the next request draws a new one with fresh numbers. |
-| `phrases` | about 70 words | Words for the blocked count ("12.431 Yeeted"). One is picked at random on every refresh, from the ones that fit next to the current count. |
+| `phrases` | about 85 words | Words for the blocked count ("12.431 Yeeted"). One is picked at random on every refresh, from the ones that fit next to the current count. |
 
 ## Phrases
 
