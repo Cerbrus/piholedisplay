@@ -30,7 +30,7 @@ The Pi was reinstalled with Raspberry Pi OS Lite 32-bit (Debian 13, Python 3.13,
 - `install.sh` ran clean on the fresh system.
 - The display draws, and signs in to the live API with the CLI password.
 - The `deploy` job moves the `deploy` branch after every green run on `master`, and `deploy/update.sh` on the Pi picked up three deploys by itself.
-- The "Stopped" frame shows on the panel when the service stops.
+- The "Stopped", "No data" and "Blocking off" frames show on the panel.
 - After a reboot the network settings, Pi-hole, the display and the update timer come back by themselves.
 - The query history of the old install was copied over and the queries of the new install merged into it.
 
@@ -40,10 +40,13 @@ Found on the real hardware and fixed:
 - The frame drawn right after a boot showed 0%: FTL answers before it has loaded its history. A frame drawn within 10 minutes after FTL started is now redrawn when those 10 minutes are over.
 - The CLI password session is not strictly read-only: it can delete diagnostics messages.
 
-## Not verified yet
+## Panel wear
 
-- **The "No data" and "Blocking off" overlays on the real panel.** Seen as PNG only.
+The panel is worn around its edges, most in the bottom-right corner. The damage is physical: it does not go away.
 
-## Later
+- **The black border is the panel's own.** No layout ever drew it. The controller drives the border on every refresh, with the waveform picked by the top two bits of register `0x50`; the vendored driver writes `0x37`, which is black.
+- **A white border makes it worse.** Tried on 2026-11-27 with `0x77`: the border clears, but black blotches bleed in along the edge. The black border hides the worn edge, so it stays.
+- **Shifting the picture by a pixel** was rejected: most pixels border one of the same colour, so a shift changes nothing for them.
+- **A full clearing cycle** (all white, all black, all red) was tested and does not help.
 
-- **Panel wear at the edges.** The panel shows degradation around the edges, most where the old layout drew a black border for years. The new layout has no border, but its three lines, the icons and the footer also never move. To look into: a full clearing cycle (all white, all black, all red) once a night, shifting the whole picture by a pixel now and then, and whether the damage is reversible with a few clearing cycles at all.
+What is left is keeping ink away from the worst spot and refreshing less: the refresh time stays out of the bottom-right corner, and the screen refreshes every 30 minutes.
