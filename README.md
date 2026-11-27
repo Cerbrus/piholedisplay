@@ -72,3 +72,7 @@ python -m piholedisplay --preview preview.png  # one frame with live Pi-hole dat
 ```
 
 Every push and pull request runs the linter, the tests and the demo render on GitHub Actions; the rendered screens are attached to the run. A green run on `master` moves the `deploy` branch forward, and the Pi picks that up within 5 minutes.
+
+## Licence
+
+[MIT](LICENSE). The Waveshare driver in `piholedisplay/lib` and the DejaVu fonts in `piholedisplay/fonts` come with their own terms, in the file headers and in `piholedisplay/fonts/LICENSE`.
