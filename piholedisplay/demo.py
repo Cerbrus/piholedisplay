@@ -6,10 +6,11 @@ from pathlib import Path
 from .canvas import Canvas
 from .icons import ICONS, SIZE
 from .model import Frame, Overlay, PiholeStats, SystemStats
-from .screen import render
+from .screen import EDGE_STAMP_RIGHT, render
 
 NOW = datetime(2026, 11, 27, 12, 0)
 SCREEN_SCALE = 4
+HOME_ASSISTANT = 'home-assistant'
 ICON_SCALE = 6
 
 
@@ -100,6 +101,7 @@ def write_demo(directory):
     icons.mkdir(parents=True, exist_ok=True)
     for name, frame in demo_frames().items():
         render(frame).to_rgb(SCREEN_SCALE).save(screens / f'{name}.png')
+    render(demo_frames()['normal-1'], EDGE_STAMP_RIGHT).to_rgb(SCREEN_SCALE).save(screens / f'{HOME_ASSISTANT}.png')
     for name in ICONS:
         icon_image(name).save(icons / f'{name}.png')
     (directory / 'icons.md').write_text(icons_markdown(), encoding='utf-8', newline='\n')

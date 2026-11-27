@@ -14,6 +14,8 @@ class Config:
     log_level: str
     api_url: str
     password_file: str | None
+    http_port: int
+    http_max_age_seconds: float
     phrases: tuple[str, ...]
 
 
@@ -40,5 +42,7 @@ def load_config(directory):
         log_level=values['log_level'],
         api_url=values['pihole']['api_url'],
         password_file=values['pihole']['password_file'],
+        http_port=values['http']['port'],
+        http_max_age_seconds=values['http']['max_age_seconds'],
         phrases=tuple(values['phrases']),
     )

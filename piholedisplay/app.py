@@ -1,3 +1,4 @@
+import io
 import logging
 import random
 import threading
@@ -7,13 +8,15 @@ from datetime import datetime, timedelta
 from .config import load_config
 from .model import Frame, Overlay
 from .pihole import PiholeClient, PiholeError
-from .screen import phrase_fits, render
+from .screen import EDGE_STAMP_RIGHT, phrase_fits, render
 from .system import read_system
+from .web import FrameServer
 
 log = logging.getLogger(__name__)
 
 FALLBACK_PHRASE = 'Blocked'
 SETTLE_SECONDS = 600
+SNAPSHOT_SCALE = 4
 
 
 def pick_phrase(phrases, blocked, rng=random):
@@ -52,6 +55,7 @@ class App:
         once=False,
         client_factory=PiholeClient,
         system_reader=read_system,
+        server_factory=FrameServer,
         clock=datetime.now,
         signals=None,
         rng=random,
@@ -61,6 +65,7 @@ class App:
         self.once = once
         self.client_factory = client_factory
         self.system_reader = system_reader
+        self.server_factory = server_factory
         self.clock = clock
         self.signals = signals or Signals()
         self.rng = rng
@@ -72,6 +77,11 @@ class App:
         self.refreshes = 0
         self.frame = None
         self.config = None
+        self.lock = threading.Lock()
+        self.server = None
+        self.snapshot = None
+        self.snapshot_taken = None
+        self.snapshots = 0
 
     def run(self):
         next_render = None
@@ -82,14 +92,19 @@ class App:
                 self.config = load_config(self.config_dir)
                 logging.getLogger().setLevel(self.config.log_level)
                 now = self.clock()
-                ok = self._fetch(now)
-                requested = self.signals.take_redraw()
-                if next_render is None or now >= next_render or ok != was_ok or requested:
-                    self._show(self._frame(now, ok))
-                    next_render = self._next_render(now, ok)
+                with self.lock:
+                    ok = self._fetch(now)
+                    requested = self.signals.take_redraw()
+                    due = next_render is None or now >= next_render or ok != was_ok or requested
+                    frame = self._frame(now, ok, bool(self.refreshes % 2)) if due else None
+                    if due:
+                        next_render = self._next_render(now, ok)
+                if frame:
+                    self._show(frame)
                 was_ok = ok
                 if self.once or self.config.interval_minutes <= 0:
                     return
+                self._serve()
                 wait = (next_render - self.clock()).total_seconds()
                 if not ok:
                     wait = min(wait, self.config.retry_seconds)
@@ -132,13 +147,13 @@ class App:
             return Overlay('shield', 'Blocking off', detail)
         return None
 
-    def _frame(self, now, ok):
+    def _frame(self, now, ok, alternate):
         return Frame(
             system=self.system_reader(),
             refreshed=now,
             pihole=self.stats,
             phrase=pick_phrase(self.config.phrases, self.stats.blocked, self.rng) if self.stats else FALLBACK_PHRASE,
-            alternate=bool(self.refreshes % 2),
+            alternate=alternate,
             overlay=self._overlay(ok),
         )
 
@@ -148,7 +163,32 @@ class App:
         self.refreshes += 1
         log.info('Rendered at %s', frame.refreshed.strftime('%H:%M:%S'))
 
+    def png(self):
+        with self.lock:
+            now = self.clock()
+            if not self.snapshot or (now - self.snapshot_taken).total_seconds() >= self.config.http_max_age_seconds:
+                frame = self._frame(now, self._fetch(now), bool(self.snapshots % 2))
+                buffer = io.BytesIO()
+                render(frame, EDGE_STAMP_RIGHT).to_rgb(SNAPSHOT_SCALE).save(buffer, 'PNG')
+                self.snapshot = buffer.getvalue()
+                self.snapshot_taken = now
+                self.snapshots += 1
+            return self.snapshot
+
+    def _serve(self):
+        port = self.config.http_port
+        if self.server and self.server.port != port:
+            self.server.close()
+            self.server = None
+        if port and not self.server:
+            try:
+                self.server = self.server_factory(port, self.png)
+            except OSError as error:
+                log.error('Cannot serve the screen on port %s: %s', port, error)
+
     def _shutdown(self):
+        if self.server:
+            self.server.close()
         if self.frame and not self.once and self.config.interval_minutes > 0:
             stopped = Overlay('pause', 'Stopped', self.clock().strftime('%d-%m %H:%M'))
             try:

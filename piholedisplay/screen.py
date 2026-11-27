@@ -14,6 +14,7 @@ BAR_STEP = 3
 BAR_WIDTH = 2
 FOOTER_Y = 94
 STAMP_RIGHT = WIDTH - 8
+EDGE_STAMP_RIGHT = WIDTH - 2
 OVERLAY_TOP = 63
 OVERLAY_BOTTOM = 79
 OVERLAY_MARGIN = 1
@@ -74,7 +75,7 @@ def chart_columns(history, count):
     return columns, per_column
 
 
-def render(frame):
+def render(frame, stamp_right=STAMP_RIGHT):
     canvas = Canvas()
     _hero(canvas, frame)
     canvas.line((DIVIDER_X, 2), (DIVIDER_X, 48))
@@ -82,7 +83,7 @@ def render(frame):
     canvas.line((CHART_LEFT, CHART_TOP - 2), (CHART_LEFT + CHART_WIDTH - 1, CHART_TOP - 2))
     hours = _chart(canvas, frame.pihole.history if frame.pihole else ())
     canvas.line((CHART_LEFT, CHART_TOP + CHART_HEIGHT + 2), (CHART_LEFT + CHART_WIDTH - 1, CHART_TOP + CHART_HEIGHT + 2))
-    _footer(canvas, frame, hours)
+    _footer(canvas, frame, hours, stamp_right)
     if frame.overlay:
         _overlay(canvas, frame.overlay)
     return canvas
@@ -156,7 +157,7 @@ def _chart(canvas, history):
     return round(len(columns) * per_column / 6)
 
 
-def _footer(canvas, frame, hours):
+def _footer(canvas, frame, hours, stamp_right):
     if hours:
         canvas.text(2, FOOTER_Y, f'-{hours}h', size=8)
     canvas.icon(34, FOOTER_Y, 'power')
@@ -165,8 +166,8 @@ def _footer(canvas, frame, hours):
         canvas.icon(88, FOOTER_Y, 'update', 'red')
         canvas.text(100, FOOTER_Y, fit(frame.pihole.update, 34, 8), 'red', size=8)
     stamp = frame.refreshed.strftime('%d-%m %H:%M')
-    canvas.icon(int(STAMP_RIGHT - text_width(stamp, 8)) - 12, FOOTER_Y, 'clock')
-    canvas.text(STAMP_RIGHT, FOOTER_Y, stamp, size=8, align='right')
+    canvas.icon(int(stamp_right - text_width(stamp, 8)) - 12, FOOTER_Y, 'clock')
+    canvas.text(stamp_right, FOOTER_Y, stamp, size=8, align='right')
 
 
 def _overlay(canvas, overlay):

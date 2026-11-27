@@ -7,6 +7,10 @@
         "api_url": "http://localhost/api",
         "password_file": "/etc/pihole/cli_pw"
     },
+    "http": {
+        "port": 8081,
+        "max_age_seconds": 120
+    },
     "phrases": [
         "Annihilated",
         "Axed",
