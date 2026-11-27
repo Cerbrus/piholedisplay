@@ -21,7 +21,7 @@ Decision 2 named a Python virtual environment. There is none: Pillow, `spidev` a
 - Tests, linter configuration and the GitHub Actions workflow.
 - systemd units, `deploy/update.sh` and `install.sh`.
 - Icon legend generated from the icon bitmaps.
-- The screen as a picture over HTTP, for a camera entity in Home Assistant. Drawn on request with fresh numbers, at most once per 2 minutes, with the refresh time against the right margin.
+- The screen as a picture over HTTP, for a camera entity in Home Assistant. Drawn on request with fresh numbers, at most once per 2 minutes.
 
 ## Verified on the Pi (2026-11-27)
 
@@ -49,4 +49,4 @@ The panel is worn around its edges, most in the bottom-right corner. The damage 
 - **Shifting the picture by a pixel** was rejected: most pixels border one of the same colour, so a shift changes nothing for them.
 - **A full clearing cycle** (all white, all black, all red) was tested and does not help.
 
-What is left is keeping ink away from the worst spot and refreshing less: the refresh time stays out of the bottom-right corner, and the screen refreshes every 30 minutes.
+What is left is keeping ink away from the worst spot and refreshing less: the `corner_padding` setting moves the refresh time out of the bottom-right corner, and the screen refreshes every 30 minutes.

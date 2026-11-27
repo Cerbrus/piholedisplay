@@ -53,6 +53,7 @@ class Display:
 
     def show(self, canvas, inverted):
         self.shown += 1
+        self.canvas = canvas
 
 
 class Client:
@@ -245,15 +246,23 @@ def test_changed_port_moves_the_server(config_dir):
     assert app.server.port == 8082
 
 
-def test_png_is_a_fresh_frame_with_the_stamp_at_the_right_margin(config_dir):
+def test_corner_padding_applies_to_the_panel_and_not_to_the_png(config_dir):
+    (config_dir / 'config.local.json').write_text(json.dumps({'corner_padding': 6}))
+    box = (screen.STAMP_RIGHT - 6, screen.FOOTER_Y, WIDTH, HEIGHT)
+
+    app, client, frames = run(config_dir, [demo_pihole()], rounds=1)
+
+    assert app.display.canvas.black.crop(box).getextrema() == (255, 255)
+    with Image.open(io.BytesIO(app.png())) as image:
+        assert image.crop(tuple(SNAPSHOT_SCALE * edge for edge in box)).getextrema() != ((255, 255), (255, 255), (255, 255))
+
+
+def test_png_is_a_fresh_frame_at_four_times_the_panel_size(config_dir):
     app, client, frames = run(config_dir, [demo_pihole(), demo_pihole(clients=99)], rounds=1)
     app.clock.now += timedelta(minutes=7)
 
     with Image.open(io.BytesIO(app.png())) as image:
-        corner = image.crop(tuple(SNAPSHOT_SCALE * edge for edge in (screen.STAMP_RIGHT, screen.FOOTER_Y, WIDTH, HEIGHT)))
-
         assert image.size == (WIDTH * SNAPSHOT_SCALE, HEIGHT * SNAPSHOT_SCALE)
-        assert corner.getextrema() != ((255, 255), (255, 255), (255, 255))
     assert app.stats.clients == 99
     assert app.refreshes == 1
 

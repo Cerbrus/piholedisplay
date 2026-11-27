@@ -45,7 +45,7 @@ tests/                     pytest; tests/fixtures/pihole.json has real v6 respon
 - `render(frame)` is a pure function from a `Frame` to a `Canvas`. Everything on screen is addressed as `'black'` or `'red'`; the two 1-bit layers must never share a pixel (a test checks this).
 - Every second refresh has `frame.alternate` set, which swaps the two lower grid rows.
 - `FrameServer` answers `/screen.png` from `App.png`: a frame of its own (fresh fetch, own phrase, own alternation), drawn again when the last one is older than `http.max_age_seconds`. It runs in a thread; `App.lock` guards the Pi-hole client and the statistics, and is not held while the panel refreshes.
-- The panel keeps its bottom-right corner empty (`STAMP_RIGHT`); the picture for Home Assistant puts the refresh time against the margin (`EDGE_STAMP_RIGHT`).
+- `corner_padding` moves the refresh time away from the bottom-right corner, for a worn panel. It is off by default and applies to the panel only, never to the picture for Home Assistant.
 - Overlays, in order of precedence: "Stopped" (on exit), "No data" (fetch failed), "Blocking off".
 - The canvas is landscape, 212 x 104. `EpaperDisplay` rotates it for the portrait panel; `draw_inverted` picks the direction.
 - Deploy is pull-based: CI fast-forwards the `deploy` branch after a green run on `master`, `deploy/update.sh` on the Pi resets the checkout to it and restarts the service.

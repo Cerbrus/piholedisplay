@@ -20,9 +20,7 @@ Red markers under the percentage appear only when there is something to report: 
 
 ## Home Assistant
 
-The display also serves its screen as a picture, at `http://<address of the Pi>:8081/screen.png`. A request draws a new frame with fresh numbers when the last one is older than 2 minutes, so the picture is more recent than the panel, with its own phrase and its own turn of the alternating grid rows. The panel keeps its bottom-right corner empty; the picture does not.
-
-![The picture for Home Assistant](docs/screens/home-assistant.png)
+The display also serves its screen as a picture, at `http://<address of the Pi>:8081/screen.png`. A request draws a new frame with fresh numbers when the last one is older than 2 minutes, so the picture is more recent than the panel, with its own phrase and its own turn of the alternating grid rows.
 
 In Home Assistant, add the **Generic Camera** integration with that address as still image URL, and show the camera in a picture entity card. Port and maximum age are settings: see [docs/configuration.md](docs/configuration.md).
 
