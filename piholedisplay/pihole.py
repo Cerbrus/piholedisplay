@@ -34,7 +34,7 @@ def queries_per_minute(history):
     return round(previous['total'] / minutes) if minutes > 0 else 0
 
 
-def parse_stats(summary, history, blocking, messages, version, now):
+def parse_stats(summary, history, blocking, messages, version, ftl, now):
     entries = sorted(history['history'], key=lambda entry: entry['timestamp'])
     queries, gravity = summary['queries'], summary['gravity']
     updated = gravity.get('last_update')
@@ -52,6 +52,7 @@ def parse_stats(summary, history, blocking, messages, version, now):
         blocking_until=now + timedelta(seconds=timer) if timer else None,
         messages=messages['count'],
         update=parse_update(version['version']),
+        uptime_seconds=ftl['ftl']['uptime'] / 1000,
     )
 
 
@@ -71,6 +72,7 @@ class PiholeClient:
                 self._get('dns/blocking'),
                 self._get('info/messages/count'),
                 self._get('info/version'),
+                self._get('info/ftl'),
                 now,
             )
         except (KeyError, TypeError, ValueError) as error:

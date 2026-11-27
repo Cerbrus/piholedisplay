@@ -14,7 +14,15 @@ NOW = datetime(2026, 11, 27, 12, 0)
 
 def stats(**overrides):
     data = {**FIXTURE, **overrides}
-    return parse_stats(data['stats/summary'], data['history'], data['dns/blocking'], data['info/messages/count'], data['info/version'], NOW)
+    return parse_stats(
+        data['stats/summary'],
+        data['history'],
+        data['dns/blocking'],
+        data['info/messages/count'],
+        data['info/version'],
+        data['info/ftl'],
+        NOW,
+    )
 
 
 def test_parse_stats_reads_the_summary():
@@ -30,6 +38,7 @@ def test_parse_stats_reads_the_summary():
     assert parsed.blocking
     assert parsed.blocking_until is None
     assert parsed.update is None
+    assert parsed.uptime_seconds == 3373.4315
 
 
 def test_parse_stats_keeps_history_in_time_order():

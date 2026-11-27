@@ -36,6 +36,7 @@ def demo_pihole(**changes):
         'blocking_until': None,
         'messages': 0,
         'update': None,
+        'uptime_seconds': 12 * 86400,
     }
     return PiholeStats(**{**values, **changes})
 

@@ -24,18 +24,24 @@ Decision 2 named a Python virtual environment. There is none: Pillow, `spidev` a
 
 ## Verified on the Pi (2026-11-27)
 
-The Pi was reinstalled with Raspberry Pi OS Lite 32-bit (Debian 13, Python 3.13, Pillow 11.1) on a second SD card; the old card is the rollback.
+The Pi was reinstalled with Raspberry Pi OS Lite 32-bit (Debian 13, Python 3.13, Pillow 11.1) on a second SD card; the old card is the rollback. A `dnsmasq` on another Pi stood in on the Pi-hole's addresses meanwhile, so the house lost DNS for under 30 seconds each way.
 
 - `install.sh` ran clean on the fresh system.
 - The display draws, and signs in to the live API with the CLI password.
-- The `deploy` job created the `deploy` branch after the first green run on `master`.
-- `rpi-lgpio` needed one change in the vendored driver: `epdif.py` set up the SPI chip-select pin (GPIO 8) as an output. The kernel's SPI driver owns that pin, and `lgpio` refuses to claim it where `RPi.GPIO` did not check. The line is removed; the SPI driver toggles chip select by itself.
+- The `deploy` job moves the `deploy` branch after every green run on `master`, and `deploy/update.sh` on the Pi picked up three deploys by itself.
+- The "Stopped" frame shows on the panel when the service stops.
+- After a reboot the network settings, Pi-hole, the display and the update timer come back by themselves.
+- The query history of the old install was copied over and the queries of the new install merged into it.
+
+Found on the real hardware and fixed:
+
+- `rpi-lgpio` refuses to claim the SPI chip-select pin (GPIO 8) that the vendored `epdif.py` set up as an output, because the kernel's SPI driver owns it. The line is removed; the SPI driver toggles chip select by itself.
+- The frame drawn right after a boot showed 0%: FTL answers before it has loaded its history. A frame drawn within 10 minutes after FTL started is now redrawn when those 10 minutes are over.
+- The CLI password session is not strictly read-only: it can delete diagnostics messages.
 
 ## Not verified yet
 
-- **`deploy/update.sh`.** It passes `shellcheck`; the first deploy after the reinstall is its first real run.
-- **CLI password sessions being read-only**, as the Pi-hole documentation describes them.
-- **The "Stopped" frame and the overlays on the real panel.** Seen as PNG only.
+- **The "No data" and "Blocking off" overlays on the real panel.** Seen as PNG only.
 
 ## Later
 

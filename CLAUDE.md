@@ -39,6 +39,7 @@ tests/                     pytest; tests/fixtures/pihole.json has real v6 respon
 ## How it works
 
 - `App.run` loops: read the config, fetch Pi-hole statistics, draw when the interval has passed or when Pi-hole went down or came back, then wait. While Pi-hole does not answer it retries every `retry_seconds` without redrawing: an e-paper refresh takes about 15 seconds of flashing.
+- A frame drawn within 10 minutes after Pi-hole started is redrawn when those 10 minutes are over: FTL answers at once after a start, but its numbers stay near zero until it has loaded the last 24 hours from its database.
 - `render(frame)` is a pure function from a `Frame` to a `Canvas`. Everything on screen is addressed as `'black'` or `'red'`; the two 1-bit layers must never share a pixel (a test checks this).
 - Every second refresh has `frame.alternate` set, which swaps the two lower grid rows.
 - Overlays, in order of precedence: "Stopped" (on exit), "No data" (fetch failed), "Blocking off".
@@ -49,7 +50,7 @@ tests/                     pytest; tests/fixtures/pihole.json has real v6 respon
 
 - **GPIO goes through `rpi-lgpio`**, the `RPi.GPIO` stand-in on current Raspberry Pi OS. It refuses pins the kernel already owns: the vendored `epdif.py` differs from upstream by one removed line, the setup of the SPI chip-select pin.
 - **Python 3.11+, Pillow 9.4+** (what Raspberry Pi OS Bookworm ships). There are no other runtime dependencies; HTTP goes through `urllib`.
-- **Pi-hole API is v6**: `POST /api/auth` with the password from `/etc/pihole/cli_pw`, then `stats/summary`, `history`, `dns/blocking`, `info/messages/count`, `info/version` with the `X-FTL-SID` header. Pi-hole allows 16 sessions: the client keeps one, logs in again on a 401 and logs out on exit.
+- **Pi-hole API is v6**: `POST /api/auth` with the password from `/etc/pihole/cli_pw`, then `stats/summary`, `history`, `dns/blocking`, `info/messages/count`, `info/version`, `info/ftl` with the `X-FTL-SID` header. Pi-hole allows 16 sessions: the client keeps one, logs in again on a 401 and logs out on exit.
 - **Layout is pixel-exact and was agreed in mockup rounds.** After a change to `screen.py` or `icons.py`, run `--demo docs` and look at the pictures.
 - Fonts load with Pillow's basic layout engine. With Raqm (the default on Linux) the same text is up to 8% wider than on Windows and the layout overflows; a test pins the advances.
 - A new icon needs a `meaning`; `docs/icons.md` and `docs/icons/` are generated from it, and a test fails when they are stale.

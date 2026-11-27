@@ -16,6 +16,7 @@ class PiholeStats:
     blocking_until: datetime | None
     messages: int
     update: str | None
+    uptime_seconds: float
 
 
 @dataclass(frozen=True)

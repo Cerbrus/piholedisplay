@@ -120,6 +120,13 @@ def test_recovery_redraws_without_waiting_for_the_interval(config_dir):
     assert frames[1].refreshed == START + timedelta(seconds=60)
 
 
+def test_redraws_early_while_pihole_is_still_loading_its_history(config_dir):
+    app, client, frames = run(config_dir, [demo_pihole(uptime_seconds=120), demo_pihole()], rounds=2)
+
+    assert [frame.refreshed for frame in frames] == [START, START + timedelta(seconds=480)]
+    assert app.stop.waits == [480, 1800]
+
+
 def test_blocking_off_shows_until_or_since(config_dir):
     timed = demo_pihole(blocking=False, blocking_until=START + timedelta(minutes=15))
     untimed = demo_pihole(blocking=False)
