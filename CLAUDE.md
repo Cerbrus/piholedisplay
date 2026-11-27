@@ -50,6 +50,7 @@ tests/                     pytest; tests/fixtures/pihole.json has real v6 respon
 - **Python 3.11+, Pillow 9.4+** (what Raspberry Pi OS Bookworm ships). There are no other runtime dependencies; HTTP goes through `urllib`.
 - **Pi-hole API is v6**: `POST /api/auth` with the password from `/etc/pihole/cli_pw`, then `stats/summary`, `history`, `dns/blocking`, `info/messages/count`, `info/version` with the `X-FTL-SID` header. Pi-hole allows 16 sessions: the client keeps one, logs in again on a 401 and logs out on exit.
 - **Layout is pixel-exact and was agreed in mockup rounds.** After a change to `screen.py` or `icons.py`, run `--demo docs` and look at the pictures.
+- Fonts load with Pillow's basic layout engine. With Raqm (the default on Linux) the same text is up to 8% wider than on Windows and the layout overflows; a test pins the advances.
 - A new icon needs a `meaning`; `docs/icons.md` and `docs/icons/` are generated from it, and a test fails when they are stale.
 - A phrase has to fit next to the blocked count; `phrase_fits` filters at draw time.
 - `config.json` is replaced on every deploy. Machine-specific values go in `config.local.json` (gitignored).
