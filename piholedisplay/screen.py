@@ -13,6 +13,7 @@ CHART_WIDTH = WIDTH - 4
 BAR_STEP = 3
 BAR_WIDTH = 2
 FOOTER_Y = 94
+STAMP_RIGHT = WIDTH - 8
 OVERLAY_TOP = 63
 OVERLAY_BOTTOM = 79
 OVERLAY_MARGIN = 1
@@ -162,10 +163,10 @@ def _footer(canvas, frame, hours):
     canvas.text(46, FOOTER_Y, duration(frame.system.uptime_seconds), size=8)
     if frame.pihole and frame.pihole.update:
         canvas.icon(88, FOOTER_Y, 'update', 'red')
-        canvas.text(100, FOOTER_Y, fit(frame.pihole.update, 38, 8), 'red', size=8)
+        canvas.text(100, FOOTER_Y, fit(frame.pihole.update, 34, 8), 'red', size=8)
     stamp = frame.refreshed.strftime('%d-%m %H:%M')
-    canvas.icon(int(WIDTH - 3 - text_width(stamp, 8)) - 12, FOOTER_Y, 'clock')
-    canvas.text(WIDTH - 3, FOOTER_Y, stamp, size=8, align='right')
+    canvas.icon(int(STAMP_RIGHT - text_width(stamp, 8)) - 12, FOOTER_Y, 'clock')
+    canvas.text(STAMP_RIGHT, FOOTER_Y, stamp, size=8, align='right')
 
 
 def _overlay(canvas, overlay):

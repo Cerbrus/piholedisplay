@@ -64,6 +64,16 @@ def test_lone_marker_sits_against_the_divider():
     assert ink(screen.render(voltage_only).red, slot)
 
 
+def test_bottom_right_corner_stays_empty():
+    corner = (screen.STAMP_RIGHT, screen.FOOTER_Y - 1, WIDTH, HEIGHT)
+
+    for frame in FRAMES.values():
+        canvas = screen.render(frame)
+
+        assert ink(canvas.black, corner) == 0
+        assert ink(canvas.red, corner) == 0
+
+
 def test_alternate_frame_changes_only_the_lower_grid_rows():
     first, second = screen.render(FRAMES['normal-1']), screen.render(FRAMES['normal-2'])
     upper = (screen.GRID_LEFT, 0, WIDTH, 24)
