@@ -94,20 +94,27 @@ def test_alternate_frame_changes_only_the_lower_grid_rows():
     assert first.black.crop(lower).tobytes() != second.black.crop(lower).tobytes()
 
 
-def test_chart_columns_use_whole_buckets_from_the_end():
-    history = tuple((index, 1) for index in range(145))
+def test_chart_columns_spread_the_whole_history_evenly():
+    history = tuple((index, 1) for index in range(144))
+    share = 144 / 69 - 2
 
-    columns, per_column = screen.chart_columns(history, 69)
+    columns = screen.chart_columns(history, 69)
 
-    assert per_column == 2
     assert len(columns) == 69
-    assert columns[-1] == (143 + 144, 2)
-    assert columns[0] == (7 + 8, 2)
+    assert columns[0] == pytest.approx((0 + 1 + 2 * share, 144 / 69))
+    assert columns[-1] == pytest.approx((141 * share + 142 + 143, 144 / 69))
+    assert sum(total for total, _ in columns) == pytest.approx(sum(range(144)))
 
 
 def test_chart_columns_with_short_or_empty_history():
-    assert screen.chart_columns((), 69) == ([], 0)
-    assert screen.chart_columns(((5, 1), (7, 2)), 69) == ([(5, 1), (7, 2)], 1)
+    assert screen.chart_columns((), 69) == []
+    assert screen.chart_columns(((5, 1), (7, 2)), 69) == [(5, 1), (7, 2)]
+
+
+def test_chart_label_is_the_span_of_the_history():
+    assert screen._chart(screen.Canvas(), demo_pihole().history) == 24
+    assert screen._chart(screen.Canvas(), demo_pihole().history[:36]) == 6
+    assert screen._chart(screen.Canvas(), ()) == 0
 
 
 def test_number_formats():

@@ -163,10 +163,10 @@ class App:
         self.refreshes += 1
         log.info('Rendered at %s', frame.refreshed.strftime('%H:%M:%S'))
 
-    def png(self):
+    def png(self, refresh=False):
         with self.lock:
             now = self.clock()
-            if not self.snapshot or (now - self.snapshot_taken).total_seconds() >= self.config.http_max_age_seconds:
+            if refresh or not self.snapshot or (now - self.snapshot_taken).total_seconds() >= self.config.http_max_age_seconds:
                 frame = self._frame(now, self._fetch(now), bool(self.snapshots % 2))
                 buffer = io.BytesIO()
                 render(frame).to_rgb(SNAPSHOT_SCALE).save(buffer, 'PNG')

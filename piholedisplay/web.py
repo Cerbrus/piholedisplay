@@ -5,16 +5,18 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 log = logging.getLogger(__name__)
 
 PATH = '/screen.png'
+REFRESH = 'refresh=1'
 
 
 def handler(produce):
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
-            if self.path.partition('?')[0] != PATH:
+            path, _, query = self.path.partition('?')
+            if path != PATH:
                 self.send_error(404)
                 return
             try:
-                image = produce()
+                image = produce(REFRESH in query.split('&'))
             except Exception:
                 log.exception('Could not render the screen')
                 self.send_error(500)

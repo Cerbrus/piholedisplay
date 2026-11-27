@@ -281,6 +281,17 @@ def test_png_is_rendered_again_only_after_the_maximum_age(config_dir):
     assert app.snapshots == 2
 
 
+def test_png_is_rendered_again_at_once_on_refresh(config_dir):
+    app, client, frames = run(config_dir, [demo_pihole()], rounds=1)
+
+    first = app.png()
+    second = app.png(refresh=True)
+
+    assert second is not first
+    assert app.png() is second
+    assert app.snapshots == 2
+
+
 def test_png_shows_no_data_while_pihole_is_down(config_dir):
     app, client, frames = run(config_dir, [demo_pihole(), PiholeError('down')], rounds=1)
 
