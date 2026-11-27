@@ -26,8 +26,8 @@ Decision 2 named a Python virtual environment. There is none: Pillow, `spidev` a
 
 - **On the display.** Everything was rendered to PNG; the code has not run on the Pi. The vendored Waveshare driver is unchanged, and `rpi-lgpio` standing in for `RPi.GPIO` under it is untested.
 - **Against the live API.** The client is tested against the response shapes read from the Pi-hole on 2026-11-27, not against the running API.
-- **`install.sh` and `deploy/update.sh`.** Syntax-checked only. `shellcheck` runs in CI.
-- **The workflow.** It has not run on GitHub.
+- **`install.sh` and `deploy/update.sh`.** They pass `shellcheck` in CI but have never run.
+- **The `deploy` job.** Lint, tests and demo render ran green on the pull request; the fast-forward of `deploy` only runs on `master`.
 - **CLI password sessions being read-only**, as the Pi-hole documentation describes them.
 
 ## Still to do
