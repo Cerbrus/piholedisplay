@@ -1,0 +1,1149 @@
+{
+  "stats/summary": {
+    "queries": {
+      "total": 67512,
+      "blocked": 12431,
+      "percent_blocked": 18.413023223128334,
+      "unique_domains": 2000,
+      "forwarded": 5000,
+      "cached": 50000,
+      "frequency": 0.5,
+      "types": {
+        "A": 0,
+        "AAAA": 0,
+        "ANY": 0,
+        "SRV": 0,
+        "SOA": 0,
+        "PTR": 0,
+        "TXT": 0,
+        "NAPTR": 0,
+        "MX": 0,
+        "DS": 0,
+        "RRSIG": 0,
+        "DNSKEY": 0,
+        "NS": 0,
+        "SVCB": 0,
+        "HTTPS": 0,
+        "OTHER": 0
+      },
+      "status": {
+        "UNKNOWN": 0,
+        "GRAVITY": 0,
+        "FORWARDED": 0,
+        "CACHE": 0,
+        "REGEX": 0,
+        "DENYLIST": 0,
+        "EXTERNAL_BLOCKED_IP": 0,
+        "EXTERNAL_BLOCKED_NULL": 0,
+        "EXTERNAL_BLOCKED_NXRA": 0,
+        "GRAVITY_CNAME": 0,
+        "REGEX_CNAME": 0,
+        "DENYLIST_CNAME": 0,
+        "RETRIED": 0,
+        "RETRIED_DNSSEC": 0,
+        "IN_PROGRESS": 0,
+        "DBBUSY": 0,
+        "SPECIAL_DOMAIN": 0,
+        "CACHE_STALE": 0,
+        "EXTERNAL_BLOCKED_EDE15": 0
+      },
+      "replies": {
+        "UNKNOWN": 0,
+        "NODATA": 0,
+        "NXDOMAIN": 0,
+        "CNAME": 0,
+        "IP": 0,
+        "DOMAIN": 0,
+        "RRNAME": 0,
+        "SERVFAIL": 0,
+        "REFUSED": 0,
+        "NOTIMP": 0,
+        "OTHER": 0,
+        "DNSSEC": 0,
+        "NONE": 0,
+        "BLOB": 0
+      }
+    },
+    "clients": {
+      "active": 23,
+      "total": 25
+    },
+    "gravity": {
+      "domains_being_blocked": 1243118,
+      "last_update": 1795316342
+    },
+    "took": 0.00038504600524902344
+  },
+  "history": {
+    "history": [
+      {
+        "timestamp": 1795693500,
+        "total": 96,
+        "cached": 57,
+        "blocked": 18,
+        "forwarded": 21
+      },
+      {
+        "timestamp": 1795694100,
+        "total": 87,
+        "cached": 52,
+        "blocked": 13,
+        "forwarded": 22
+      },
+      {
+        "timestamp": 1795694700,
+        "total": 152,
+        "cached": 91,
+        "blocked": 26,
+        "forwarded": 35
+      },
+      {
+        "timestamp": 1795695300,
+        "total": 154,
+        "cached": 92,
+        "blocked": 16,
+        "forwarded": 46
+      },
+      {
+        "timestamp": 1795695900,
+        "total": 87,
+        "cached": 52,
+        "blocked": 20,
+        "forwarded": 15
+      },
+      {
+        "timestamp": 1795696500,
+        "total": 151,
+        "cached": 90,
+        "blocked": 20,
+        "forwarded": 41
+      },
+      {
+        "timestamp": 1795697100,
+        "total": 127,
+        "cached": 76,
+        "blocked": 16,
+        "forwarded": 35
+      },
+      {
+        "timestamp": 1795697700,
+        "total": 195,
+        "cached": 117,
+        "blocked": 33,
+        "forwarded": 45
+      },
+      {
+        "timestamp": 1795698300,
+        "total": 218,
+        "cached": 130,
+        "blocked": 39,
+        "forwarded": 49
+      },
+      {
+        "timestamp": 1795698900,
+        "total": 168,
+        "cached": 100,
+        "blocked": 32,
+        "forwarded": 36
+      },
+      {
+        "timestamp": 1795699500,
+        "total": 145,
+        "cached": 87,
+        "blocked": 19,
+        "forwarded": 39
+      },
+      {
+        "timestamp": 1795700100,
+        "total": 153,
+        "cached": 91,
+        "blocked": 35,
+        "forwarded": 27
+      },
+      {
+        "timestamp": 1795700700,
+        "total": 208,
+        "cached": 124,
+        "blocked": 32,
+        "forwarded": 52
+      },
+      {
+        "timestamp": 1795701300,
+        "total": 152,
+        "cached": 91,
+        "blocked": 30,
+        "forwarded": 31
+      },
+      {
+        "timestamp": 1795701900,
+        "total": 168,
+        "cached": 100,
+        "blocked": 20,
+        "forwarded": 48
+      },
+      {
+        "timestamp": 1795702500,
+        "total": 244,
+        "cached": 146,
+        "blocked": 25,
+        "forwarded": 73
+      },
+      {
+        "timestamp": 1795703100,
+        "total": 277,
+        "cached": 166,
+        "blocked": 28,
+        "forwarded": 83
+      },
+      {
+        "timestamp": 1795703700,
+        "total": 298,
+        "cached": 178,
+        "blocked": 41,
+        "forwarded": 79
+      },
+      {
+        "timestamp": 1795704300,
+        "total": 273,
+        "cached": 163,
+        "blocked": 56,
+        "forwarded": 54
+      },
+      {
+        "timestamp": 1795704900,
+        "total": 319,
+        "cached": 191,
+        "blocked": 50,
+        "forwarded": 78
+      },
+      {
+        "timestamp": 1795705500,
+        "total": 318,
+        "cached": 190,
+        "blocked": 75,
+        "forwarded": 53
+      },
+      {
+        "timestamp": 1795706100,
+        "total": 278,
+        "cached": 166,
+        "blocked": 58,
+        "forwarded": 54
+      },
+      {
+        "timestamp": 1795706700,
+        "total": 311,
+        "cached": 186,
+        "blocked": 51,
+        "forwarded": 74
+      },
+      {
+        "timestamp": 1795707300,
+        "total": 368,
+        "cached": 220,
+        "blocked": 44,
+        "forwarded": 104
+      },
+      {
+        "timestamp": 1795707900,
+        "total": 306,
+        "cached": 183,
+        "blocked": 35,
+        "forwarded": 88
+      },
+      {
+        "timestamp": 1795708500,
+        "total": 287,
+        "cached": 172,
+        "blocked": 50,
+        "forwarded": 65
+      },
+      {
+        "timestamp": 1795709100,
+        "total": 314,
+        "cached": 188,
+        "blocked": 76,
+        "forwarded": 50
+      },
+      {
+        "timestamp": 1795709700,
+        "total": 347,
+        "cached": 208,
+        "blocked": 75,
+        "forwarded": 64
+      },
+      {
+        "timestamp": 1795710300,
+        "total": 412,
+        "cached": 247,
+        "blocked": 59,
+        "forwarded": 106
+      },
+      {
+        "timestamp": 1795710900,
+        "total": 377,
+        "cached": 226,
+        "blocked": 84,
+        "forwarded": 67
+      },
+      {
+        "timestamp": 1795711500,
+        "total": 397,
+        "cached": 238,
+        "blocked": 60,
+        "forwarded": 99
+      },
+      {
+        "timestamp": 1795712100,
+        "total": 409,
+        "cached": 245,
+        "blocked": 65,
+        "forwarded": 99
+      },
+      {
+        "timestamp": 1795712700,
+        "total": 375,
+        "cached": 225,
+        "blocked": 88,
+        "forwarded": 62
+      },
+      {
+        "timestamp": 1795713300,
+        "total": 443,
+        "cached": 265,
+        "blocked": 105,
+        "forwarded": 73
+      },
+      {
+        "timestamp": 1795713900,
+        "total": 370,
+        "cached": 222,
+        "blocked": 84,
+        "forwarded": 64
+      },
+      {
+        "timestamp": 1795714500,
+        "total": 454,
+        "cached": 272,
+        "blocked": 91,
+        "forwarded": 91
+      },
+      {
+        "timestamp": 1795715100,
+        "total": 407,
+        "cached": 244,
+        "blocked": 83,
+        "forwarded": 80
+      },
+      {
+        "timestamp": 1795715700,
+        "total": 438,
+        "cached": 262,
+        "blocked": 107,
+        "forwarded": 69
+      },
+      {
+        "timestamp": 1795716300,
+        "total": 522,
+        "cached": 313,
+        "blocked": 96,
+        "forwarded": 113
+      },
+      {
+        "timestamp": 1795716900,
+        "total": 430,
+        "cached": 258,
+        "blocked": 89,
+        "forwarded": 83
+      },
+      {
+        "timestamp": 1795717500,
+        "total": 453,
+        "cached": 271,
+        "blocked": 88,
+        "forwarded": 94
+      },
+      {
+        "timestamp": 1795718100,
+        "total": 509,
+        "cached": 305,
+        "blocked": 71,
+        "forwarded": 133
+      },
+      {
+        "timestamp": 1795718700,
+        "total": 460,
+        "cached": 276,
+        "blocked": 50,
+        "forwarded": 134
+      },
+      {
+        "timestamp": 1795719300,
+        "total": 562,
+        "cached": 337,
+        "blocked": 110,
+        "forwarded": 115
+      },
+      {
+        "timestamp": 1795719900,
+        "total": 523,
+        "cached": 313,
+        "blocked": 59,
+        "forwarded": 151
+      },
+      {
+        "timestamp": 1795720500,
+        "total": 572,
+        "cached": 343,
+        "blocked": 62,
+        "forwarded": 167
+      },
+      {
+        "timestamp": 1795721100,
+        "total": 591,
+        "cached": 354,
+        "blocked": 72,
+        "forwarded": 165
+      },
+      {
+        "timestamp": 1795721700,
+        "total": 522,
+        "cached": 313,
+        "blocked": 85,
+        "forwarded": 124
+      },
+      {
+        "timestamp": 1795722300,
+        "total": 545,
+        "cached": 327,
+        "blocked": 125,
+        "forwarded": 93
+      },
+      {
+        "timestamp": 1795722900,
+        "total": 504,
+        "cached": 302,
+        "blocked": 96,
+        "forwarded": 106
+      },
+      {
+        "timestamp": 1795723500,
+        "total": 602,
+        "cached": 361,
+        "blocked": 64,
+        "forwarded": 177
+      },
+      {
+        "timestamp": 1795724100,
+        "total": 602,
+        "cached": 361,
+        "blocked": 113,
+        "forwarded": 128
+      },
+      {
+        "timestamp": 1795724700,
+        "total": 587,
+        "cached": 352,
+        "blocked": 136,
+        "forwarded": 99
+      },
+      {
+        "timestamp": 1795725300,
+        "total": 557,
+        "cached": 334,
+        "blocked": 97,
+        "forwarded": 126
+      },
+      {
+        "timestamp": 1795725900,
+        "total": 531,
+        "cached": 318,
+        "blocked": 77,
+        "forwarded": 136
+      },
+      {
+        "timestamp": 1795726500,
+        "total": 540,
+        "cached": 324,
+        "blocked": 62,
+        "forwarded": 154
+      },
+      {
+        "timestamp": 1795727100,
+        "total": 603,
+        "cached": 361,
+        "blocked": 63,
+        "forwarded": 179
+      },
+      {
+        "timestamp": 1795727700,
+        "total": 563,
+        "cached": 337,
+        "blocked": 138,
+        "forwarded": 88
+      },
+      {
+        "timestamp": 1795728300,
+        "total": 578,
+        "cached": 346,
+        "blocked": 110,
+        "forwarded": 122
+      },
+      {
+        "timestamp": 1795728900,
+        "total": 563,
+        "cached": 337,
+        "blocked": 114,
+        "forwarded": 112
+      },
+      {
+        "timestamp": 1795729500,
+        "total": 657,
+        "cached": 394,
+        "blocked": 99,
+        "forwarded": 164
+      },
+      {
+        "timestamp": 1795730100,
+        "total": 593,
+        "cached": 355,
+        "blocked": 144,
+        "forwarded": 94
+      },
+      {
+        "timestamp": 1795730700,
+        "total": 663,
+        "cached": 397,
+        "blocked": 151,
+        "forwarded": 115
+      },
+      {
+        "timestamp": 1795731300,
+        "total": 597,
+        "cached": 358,
+        "blocked": 100,
+        "forwarded": 139
+      },
+      {
+        "timestamp": 1795731900,
+        "total": 615,
+        "cached": 369,
+        "blocked": 97,
+        "forwarded": 149
+      },
+      {
+        "timestamp": 1795732500,
+        "total": 659,
+        "cached": 395,
+        "blocked": 124,
+        "forwarded": 140
+      },
+      {
+        "timestamp": 1795733100,
+        "total": 620,
+        "cached": 372,
+        "blocked": 71,
+        "forwarded": 177
+      },
+      {
+        "timestamp": 1795733700,
+        "total": 667,
+        "cached": 400,
+        "blocked": 147,
+        "forwarded": 120
+      },
+      {
+        "timestamp": 1795734300,
+        "total": 580,
+        "cached": 348,
+        "blocked": 95,
+        "forwarded": 137
+      },
+      {
+        "timestamp": 1795734900,
+        "total": 636,
+        "cached": 381,
+        "blocked": 131,
+        "forwarded": 124
+      },
+      {
+        "timestamp": 1795735500,
+        "total": 660,
+        "cached": 396,
+        "blocked": 95,
+        "forwarded": 169
+      },
+      {
+        "timestamp": 1795736100,
+        "total": 571,
+        "cached": 342,
+        "blocked": 101,
+        "forwarded": 128
+      },
+      {
+        "timestamp": 1795736700,
+        "total": 605,
+        "cached": 363,
+        "blocked": 91,
+        "forwarded": 151
+      },
+      {
+        "timestamp": 1795737300,
+        "total": 631,
+        "cached": 378,
+        "blocked": 102,
+        "forwarded": 151
+      },
+      {
+        "timestamp": 1795737900,
+        "total": 600,
+        "cached": 360,
+        "blocked": 88,
+        "forwarded": 152
+      },
+      {
+        "timestamp": 1795738500,
+        "total": 570,
+        "cached": 342,
+        "blocked": 109,
+        "forwarded": 119
+      },
+      {
+        "timestamp": 1795739100,
+        "total": 596,
+        "cached": 357,
+        "blocked": 71,
+        "forwarded": 168
+      },
+      {
+        "timestamp": 1795739700,
+        "total": 592,
+        "cached": 355,
+        "blocked": 114,
+        "forwarded": 123
+      },
+      {
+        "timestamp": 1795740300,
+        "total": 564,
+        "cached": 338,
+        "blocked": 86,
+        "forwarded": 140
+      },
+      {
+        "timestamp": 1795740900,
+        "total": 615,
+        "cached": 369,
+        "blocked": 94,
+        "forwarded": 152
+      },
+      {
+        "timestamp": 1795741500,
+        "total": 582,
+        "cached": 349,
+        "blocked": 82,
+        "forwarded": 151
+      },
+      {
+        "timestamp": 1795742100,
+        "total": 547,
+        "cached": 328,
+        "blocked": 56,
+        "forwarded": 163
+      },
+      {
+        "timestamp": 1795742700,
+        "total": 484,
+        "cached": 290,
+        "blocked": 117,
+        "forwarded": 77
+      },
+      {
+        "timestamp": 1795743300,
+        "total": 471,
+        "cached": 282,
+        "blocked": 115,
+        "forwarded": 74
+      },
+      {
+        "timestamp": 1795743900,
+        "total": 493,
+        "cached": 295,
+        "blocked": 95,
+        "forwarded": 103
+      },
+      {
+        "timestamp": 1795744500,
+        "total": 491,
+        "cached": 294,
+        "blocked": 92,
+        "forwarded": 105
+      },
+      {
+        "timestamp": 1795745100,
+        "total": 484,
+        "cached": 290,
+        "blocked": 61,
+        "forwarded": 133
+      },
+      {
+        "timestamp": 1795745700,
+        "total": 458,
+        "cached": 274,
+        "blocked": 67,
+        "forwarded": 117
+      },
+      {
+        "timestamp": 1795746300,
+        "total": 473,
+        "cached": 283,
+        "blocked": 107,
+        "forwarded": 83
+      },
+      {
+        "timestamp": 1795746900,
+        "total": 449,
+        "cached": 269,
+        "blocked": 65,
+        "forwarded": 115
+      },
+      {
+        "timestamp": 1795747500,
+        "total": 455,
+        "cached": 273,
+        "blocked": 52,
+        "forwarded": 130
+      },
+      {
+        "timestamp": 1795748100,
+        "total": 501,
+        "cached": 300,
+        "blocked": 52,
+        "forwarded": 149
+      },
+      {
+        "timestamp": 1795748700,
+        "total": 459,
+        "cached": 275,
+        "blocked": 92,
+        "forwarded": 92
+      },
+      {
+        "timestamp": 1795749300,
+        "total": 393,
+        "cached": 235,
+        "blocked": 57,
+        "forwarded": 101
+      },
+      {
+        "timestamp": 1795749900,
+        "total": 394,
+        "cached": 236,
+        "blocked": 78,
+        "forwarded": 80
+      },
+      {
+        "timestamp": 1795750500,
+        "total": 390,
+        "cached": 234,
+        "blocked": 52,
+        "forwarded": 104
+      },
+      {
+        "timestamp": 1795751100,
+        "total": 368,
+        "cached": 220,
+        "blocked": 74,
+        "forwarded": 74
+      },
+      {
+        "timestamp": 1795751700,
+        "total": 418,
+        "cached": 250,
+        "blocked": 85,
+        "forwarded": 83
+      },
+      {
+        "timestamp": 1795752300,
+        "total": 337,
+        "cached": 202,
+        "blocked": 64,
+        "forwarded": 71
+      },
+      {
+        "timestamp": 1795752900,
+        "total": 355,
+        "cached": 213,
+        "blocked": 71,
+        "forwarded": 71
+      },
+      {
+        "timestamp": 1795753500,
+        "total": 330,
+        "cached": 198,
+        "blocked": 54,
+        "forwarded": 78
+      },
+      {
+        "timestamp": 1795754100,
+        "total": 400,
+        "cached": 240,
+        "blocked": 97,
+        "forwarded": 63
+      },
+      {
+        "timestamp": 1795754700,
+        "total": 291,
+        "cached": 174,
+        "blocked": 43,
+        "forwarded": 74
+      },
+      {
+        "timestamp": 1795755300,
+        "total": 353,
+        "cached": 211,
+        "blocked": 46,
+        "forwarded": 96
+      },
+      {
+        "timestamp": 1795755900,
+        "total": 331,
+        "cached": 198,
+        "blocked": 55,
+        "forwarded": 78
+      },
+      {
+        "timestamp": 1795756500,
+        "total": 276,
+        "cached": 165,
+        "blocked": 60,
+        "forwarded": 51
+      },
+      {
+        "timestamp": 1795757100,
+        "total": 242,
+        "cached": 145,
+        "blocked": 43,
+        "forwarded": 54
+      },
+      {
+        "timestamp": 1795757700,
+        "total": 251,
+        "cached": 150,
+        "blocked": 36,
+        "forwarded": 65
+      },
+      {
+        "timestamp": 1795758300,
+        "total": 324,
+        "cached": 194,
+        "blocked": 73,
+        "forwarded": 57
+      },
+      {
+        "timestamp": 1795758900,
+        "total": 230,
+        "cached": 138,
+        "blocked": 52,
+        "forwarded": 40
+      },
+      {
+        "timestamp": 1795759500,
+        "total": 240,
+        "cached": 144,
+        "blocked": 53,
+        "forwarded": 43
+      },
+      {
+        "timestamp": 1795760100,
+        "total": 269,
+        "cached": 161,
+        "blocked": 30,
+        "forwarded": 78
+      },
+      {
+        "timestamp": 1795760700,
+        "total": 257,
+        "cached": 154,
+        "blocked": 39,
+        "forwarded": 64
+      },
+      {
+        "timestamp": 1795761300,
+        "total": 184,
+        "cached": 110,
+        "blocked": 30,
+        "forwarded": 44
+      },
+      {
+        "timestamp": 1795761900,
+        "total": 225,
+        "cached": 135,
+        "blocked": 49,
+        "forwarded": 41
+      },
+      {
+        "timestamp": 1795762500,
+        "total": 184,
+        "cached": 110,
+        "blocked": 31,
+        "forwarded": 43
+      },
+      {
+        "timestamp": 1795763100,
+        "total": 223,
+        "cached": 133,
+        "blocked": 36,
+        "forwarded": 54
+      },
+      {
+        "timestamp": 1795763700,
+        "total": 187,
+        "cached": 112,
+        "blocked": 34,
+        "forwarded": 41
+      },
+      {
+        "timestamp": 1795764300,
+        "total": 130,
+        "cached": 78,
+        "blocked": 30,
+        "forwarded": 22
+      },
+      {
+        "timestamp": 1795764900,
+        "total": 137,
+        "cached": 82,
+        "blocked": 17,
+        "forwarded": 38
+      },
+      {
+        "timestamp": 1795765500,
+        "total": 172,
+        "cached": 103,
+        "blocked": 41,
+        "forwarded": 28
+      },
+      {
+        "timestamp": 1795766100,
+        "total": 216,
+        "cached": 129,
+        "blocked": 41,
+        "forwarded": 46
+      },
+      {
+        "timestamp": 1795766700,
+        "total": 162,
+        "cached": 97,
+        "blocked": 26,
+        "forwarded": 39
+      },
+      {
+        "timestamp": 1795767300,
+        "total": 209,
+        "cached": 125,
+        "blocked": 43,
+        "forwarded": 41
+      },
+      {
+        "timestamp": 1795767900,
+        "total": 89,
+        "cached": 53,
+        "blocked": 18,
+        "forwarded": 18
+      },
+      {
+        "timestamp": 1795768500,
+        "total": 187,
+        "cached": 112,
+        "blocked": 39,
+        "forwarded": 36
+      },
+      {
+        "timestamp": 1795769100,
+        "total": 170,
+        "cached": 102,
+        "blocked": 30,
+        "forwarded": 38
+      },
+      {
+        "timestamp": 1795769700,
+        "total": 106,
+        "cached": 63,
+        "blocked": 19,
+        "forwarded": 24
+      },
+      {
+        "timestamp": 1795770300,
+        "total": 179,
+        "cached": 107,
+        "blocked": 24,
+        "forwarded": 48
+      },
+      {
+        "timestamp": 1795770900,
+        "total": 71,
+        "cached": 42,
+        "blocked": 16,
+        "forwarded": 13
+      },
+      {
+        "timestamp": 1795771500,
+        "total": 95,
+        "cached": 57,
+        "blocked": 11,
+        "forwarded": 27
+      },
+      {
+        "timestamp": 1795772100,
+        "total": 88,
+        "cached": 52,
+        "blocked": 9,
+        "forwarded": 27
+      },
+      {
+        "timestamp": 1795772700,
+        "total": 169,
+        "cached": 101,
+        "blocked": 37,
+        "forwarded": 31
+      },
+      {
+        "timestamp": 1795773300,
+        "total": 117,
+        "cached": 70,
+        "blocked": 27,
+        "forwarded": 20
+      },
+      {
+        "timestamp": 1795773900,
+        "total": 165,
+        "cached": 99,
+        "blocked": 38,
+        "forwarded": 28
+      },
+      {
+        "timestamp": 1795774500,
+        "total": 105,
+        "cached": 63,
+        "blocked": 19,
+        "forwarded": 23
+      },
+      {
+        "timestamp": 1795775100,
+        "total": 51,
+        "cached": 30,
+        "blocked": 8,
+        "forwarded": 13
+      },
+      {
+        "timestamp": 1795775700,
+        "total": 65,
+        "cached": 39,
+        "blocked": 8,
+        "forwarded": 18
+      },
+      {
+        "timestamp": 1795776300,
+        "total": 88,
+        "cached": 52,
+        "blocked": 11,
+        "forwarded": 25
+      },
+      {
+        "timestamp": 1795776900,
+        "total": 53,
+        "cached": 31,
+        "blocked": 9,
+        "forwarded": 13
+      },
+      {
+        "timestamp": 1795777500,
+        "total": 104,
+        "cached": 62,
+        "blocked": 11,
+        "forwarded": 31
+      },
+      {
+        "timestamp": 1795778100,
+        "total": 170,
+        "cached": 102,
+        "blocked": 32,
+        "forwarded": 36
+      },
+      {
+        "timestamp": 1795778700,
+        "total": 100,
+        "cached": 60,
+        "blocked": 11,
+        "forwarded": 29
+      },
+      {
+        "timestamp": 1795779300,
+        "total": 169,
+        "cached": 101,
+        "blocked": 30,
+        "forwarded": 38
+      },
+      {
+        "timestamp": 1795779900,
+        "total": 166,
+        "cached": 99,
+        "blocked": 36,
+        "forwarded": 31
+      }
+    ],
+    "took": 0.002
+  },
+  "dns/blocking": {
+    "blocking": "enabled",
+    "timer": null,
+    "took": 0.0002529621124267578
+  },
+  "info/messages/count": {
+    "count": 1,
+    "took": 0.007567882537841797
+  },
+  "info/version": {
+    "version": {
+      "core": {
+        "local": {
+          "version": "v6.6",
+          "branch": "master",
+          "hash": "f7c0220e"
+        },
+        "remote": {
+          "version": "v6.6",
+          "hash": "f7c0220e"
+        }
+      },
+      "web": {
+        "local": {
+          "version": "v6.6.1",
+          "branch": "master",
+          "hash": "fb699c4e"
+        },
+        "remote": {
+          "version": "v6.6.1",
+          "hash": "fb699c4e"
+        }
+      },
+      "ftl": {
+        "local": {
+          "hash": "2a0fcb74",
+          "branch": "master",
+          "version": "v6.9",
+          "date": "2026-11-11 18:30:30 +0000"
+        },
+        "remote": {
+          "version": "v6.9",
+          "hash": "2a0fcb74"
+        }
+      },
+      "docker": {
+        "local": null,
+        "remote": null
+      }
+    },
+    "took": 0.0004699230194091797
+  }
+}

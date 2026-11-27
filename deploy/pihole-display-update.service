@@ -1,0 +1,8 @@
+[Unit]
+Description=Update the Pi-hole display from the deploy branch
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=@DIR@/deploy/update.sh

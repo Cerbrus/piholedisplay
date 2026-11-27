@@ -1,61 +1,65 @@
-# Pihole Display
+# Pi-hole Display
 
+Pi-hole and system statistics on a Waveshare 2.13 inch three-colour e-paper display.
 
-![Pi Hole stats](pihole-stat-screenshot.jpg)
+![The screen](docs/screens/normal-1.png)
+
+The top left shows the share of today's queries that was blocked, with the count under it. The grid on the right holds clients, queries per minute, blocklist size and CPU temperature; its lower rows alternate on every refresh between IP address, memory and disk, and host name, blocklist age and WiFi signal. The chart shows the last 23 hours, blocked queries in red. [docs/icons.md](docs/icons.md) explains every icon.
+
+A red bar over the chart reports a state that needs attention:
+
+| | |
+|---|---|
+| ![Blocking off](docs/screens/blocking-off.png) | Blocking is switched off, with the time it comes back when it was paused with a timer |
+| ![No data](docs/screens/no-data.png) | Pi-hole does not answer; the numbers are the last ones received |
+| ![Stopped](docs/screens/stopped.png) | The display service was stopped; e-paper keeps its last picture, so this one says so |
+
+Red markers under the percentage appear only when there is something to report: a warning triangle with the number of Pi-hole diagnostics messages, and a lightning bolt when the Pi has been under-voltage since boot. An arrow with a version in the footer means a Pi-hole update is available.
+
+![Markers](docs/screens/markers.png)
 
 ## Hardware
-  - Raspberry Pi 3B+ with pihole
-  - Waveshare 2.13 inch ePaper display model B (3 colors: black, white and red)
+
+- Raspberry Pi with Pi-hole v6 (built on a Pi Zero W)
+- Waveshare 2.13 inch e-Paper HAT (B): 212 x 104 pixels, black, white and red
+
 ## Installation
-### Waveshare display drivers
-  - Install the libraries mentioned [here](https://www.waveshare.com/wiki/Pioneer600#Libraries_Installation_for_RPi).
-  - Enable spi, i2c and edit the modules config file as given [here](https://www.waveshare.com/wiki/Pioneer600#Configuring_the_interfaces)
-  - [Optional] Download demo code from [here](https://www.waveshare.com/wiki/File:2.13inch_e-Paper_HAT-code.7z) and run it to make sure everything is working
 
-  - Also install the requests library and dotmap libraries (needs pip to be installed)
-    ~~~~
-    sudo pip install requests
-    pip3 install dotmap
-    ~~~~
-### Final steps
-  - Clone this repository onto a suitable forlder on your Pi.
-    ~~~~
-    git clone https://github.com/Cerbrus/piholedisplay.git
-    ~~~~
-  - Navigate to the `/piholedisplay` folder
-    ~~~~
-    cd piholedisplay/
-    ~~~~
-  - Grant execution permissions to the startup script
-    ~~~~
-    chmod +x start-pihole-stat.sh
-    ~~~~
-  - Navigate to the `/python` folder
-    ~~~~
-    cd python/
-    ~~~~
-  - Create `api-key.txt` containing your pihole API key
-    ~~~~
-    echo "My API key" >> api-key.txt
-    ~~~~
-  - Run the stats.py script using
-    ~~~~
-    python stats.py
-    ~~~~
-### Running on startup
-  - Lastly we just want to make this run at boot. This can be done in different ways:
-#### a: Using `rc.local`:
-  - This can be done by editing `/etc/rc.local`
-  - Open `rc.local`:  `sudo nano /etc/rc.local`
-  -  Add `/home/pi/piholedisplay/start-pihole-stat.sh &` before `exit 0`.
-  ![Editing rc.local](rc.local.png)
-  - Then save and you can reboot to test it out.
+On Raspberry Pi OS (Bookworm or newer), with Pi-hole already installed:
 
-#### b: As a service:
-  - Another option is to run it as a service:
-    ~~~~
-    sudo cp pihole-stats.service /etc/systemd/system
-    sudo systemctl daemon-reload
-    sudo systemctl enable pihole-stats.service
-    journalctl -u pihole-stats.service
-    ~~~~
+```bash
+git clone https://github.com/Cerbrus/piholedisplay.git
+cd piholedisplay
+sudo ./install.sh
+```
+
+`install.sh` installs the Python packages for the display from apt, enables SPI, adds your user to the `pihole`, `spi`, `gpio` and `video` groups, switches the checkout to the `deploy` branch and starts two systemd units:
+
+- `pihole-display.service` draws the screen.
+- `pihole-display-update.timer` checks every 5 minutes for a new commit on `deploy`, and restarts the display when there is one.
+
+```bash
+journalctl -fu pihole-display          # follow the display
+systemctl list-timers pihole-display-update.timer
+sudo systemctl stop pihole-display     # draws the "Stopped" frame
+```
+
+No API key is needed: the display signs in with the CLI password Pi-hole keeps in `/etc/pihole/cli_pw`.
+
+## Configuration
+
+Copy the settings you want to change from `config.json` into `config.local.json`. [docs/configuration.md](docs/configuration.md) lists them all.
+
+## Development
+
+Nothing but Python and Pillow is needed to work on the screen: it renders to a PNG file when there is no display.
+
+```bash
+pip install -e ".[dev]"
+pytest
+ruff check . && ruff format --check .
+python -m piholedisplay --demo docs            # redraw docs/screens, docs/icons and docs/icons.md
+python -m piholedisplay --preview preview.png  # one frame with live Pi-hole data, on a machine that can reach the API
+```
+
+Every push and pull request runs the linter, the tests and the demo render on GitHub Actions; the rendered screens are attached to the run. A green run on `master` moves the `deploy` branch forward, and the Pi picks that up within 5 minutes.

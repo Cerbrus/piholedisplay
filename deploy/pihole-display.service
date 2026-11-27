@@ -1,0 +1,16 @@
+[Unit]
+Description=Pi-hole statistics on the e-paper display
+After=network-online.target pihole-FTL.service
+Wants=network-online.target
+
+[Service]
+User=@USER@
+WorkingDirectory=@DIR@
+ExecStart=/usr/bin/python3 -m piholedisplay
+Environment=PYTHONUNBUFFERED=1
+Restart=on-failure
+RestartSec=30
+TimeoutStopSec=90
+
+[Install]
+WantedBy=multi-user.target
