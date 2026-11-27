@@ -21,6 +21,29 @@ def pick_phrase(phrases, blocked, rng=random):
     return rng.choice(fitting) if fitting else FALLBACK_PHRASE
 
 
+class Signals:
+    def __init__(self):
+        self.stopping = False
+        self.redraw = False
+        self.wake = threading.Event()
+
+    def stop(self, *_):
+        self.stopping = True
+        self.wake.set()
+
+    def request_redraw(self, *_):
+        self.redraw = True
+        self.wake.set()
+
+    def take_redraw(self):
+        requested, self.redraw = self.redraw, False
+        return requested
+
+    def wait(self, seconds):
+        self.wake.wait(seconds)
+        self.wake.clear()
+
+
 class App:
     def __init__(
         self,
@@ -30,7 +53,7 @@ class App:
         client_factory=PiholeClient,
         system_reader=read_system,
         clock=datetime.now,
-        stop=None,
+        signals=None,
         rng=random,
     ):
         self.config_dir = config_dir
@@ -39,7 +62,7 @@ class App:
         self.client_factory = client_factory
         self.system_reader = system_reader
         self.clock = clock
-        self.stop = stop or threading.Event()
+        self.signals = signals or Signals()
         self.rng = rng
         self.client = None
         self.client_key = None
@@ -55,12 +78,13 @@ class App:
         was_ok = None
         self.last_success = self.clock()
         try:
-            while not self.stop.is_set():
+            while not self.signals.stopping:
                 self.config = load_config(self.config_dir)
                 logging.getLogger().setLevel(self.config.log_level)
                 now = self.clock()
                 ok = self._fetch(now)
-                if next_render is None or now >= next_render or ok != was_ok:
+                requested = self.signals.take_redraw()
+                if next_render is None or now >= next_render or ok != was_ok or requested:
                     self._show(self._frame(now, ok))
                     next_render = self._next_render(now, ok)
                 was_ok = ok
@@ -69,7 +93,7 @@ class App:
                 wait = (next_render - self.clock()).total_seconds()
                 if not ok:
                     wait = min(wait, self.config.retry_seconds)
-                self.stop.wait(max(wait, 1))
+                self.signals.wait(max(wait, 1))
         finally:
             self._shutdown()
 

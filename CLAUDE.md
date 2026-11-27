@@ -40,6 +40,7 @@ tests/                     pytest; tests/fixtures/pihole.json has real v6 respon
 
 - `App.run` loops: read the config, fetch Pi-hole statistics, draw when the interval has passed or when Pi-hole went down or came back, then wait. While Pi-hole does not answer it retries every `retry_seconds` without redrawing: an e-paper refresh takes about 15 seconds of flashing.
 - A frame drawn within 10 minutes after Pi-hole started is redrawn when those 10 minutes are over: FTL answers at once after a start, but its numbers stay near zero until it has loaded the last 24 hours from its database.
+- `SIGUSR1` asks for a redraw now; the unit maps `systemctl reload pihole-display` to it.
 - `render(frame)` is a pure function from a `Frame` to a `Canvas`. Everything on screen is addressed as `'black'` or `'red'`; the two 1-bit layers must never share a pixel (a test checks this).
 - Every second refresh has `frame.alternate` set, which swaps the two lower grid rows.
 - Overlays, in order of precedence: "Stopped" (on exit), "No data" (fetch failed), "Blocking off".

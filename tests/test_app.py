@@ -1,12 +1,11 @@
 import json
 import random
-import threading
 from datetime import datetime, timedelta
 from pathlib import Path
 
 import pytest
 
-from piholedisplay.app import FALLBACK_PHRASE, App, pick_phrase
+from piholedisplay.app import FALLBACK_PHRASE, App, Signals, pick_phrase
 from piholedisplay.config import load_config
 from piholedisplay.demo import demo_pihole, demo_system
 from piholedisplay.pihole import PiholeError
@@ -23,18 +22,24 @@ class Clock:
         return self.now
 
 
-class Stop:
-    def __init__(self, clock, rounds):
+class FakeSignals:
+    def __init__(self, clock, rounds, redraws=(), wake_after=None):
         self.clock = clock
         self.rounds = rounds
+        self.redraws = list(redraws)
+        self.wake_after = wake_after
         self.waits = []
 
-    def is_set(self):
+    @property
+    def stopping(self):
         return self.rounds <= 0
+
+    def take_redraw(self):
+        return self.redraws.pop(0) if self.redraws else False
 
     def wait(self, seconds):
         self.waits.append(seconds)
-        self.clock.now += timedelta(seconds=seconds)
+        self.clock.now += timedelta(seconds=min(seconds, self.wake_after or seconds))
         self.rounds -= 1
 
 
@@ -67,7 +72,7 @@ def config_dir(tmp_path):
     return tmp_path
 
 
-def run(config_dir, results, rounds, **options):
+def run(config_dir, results, rounds, redraws=(), wake_after=None, **options):
     clock = Clock()
     frames = []
     client = Client(results)
@@ -77,7 +82,7 @@ def run(config_dir, results, rounds, **options):
         client_factory=lambda *_: client,
         system_reader=demo_system,
         clock=clock,
-        stop=Stop(clock, rounds),
+        signals=FakeSignals(clock, rounds, redraws, wake_after),
         rng=random.Random(1),
         **options,
     )
@@ -93,7 +98,7 @@ def test_renders_every_interval_and_alternates(config_dir):
     assert [frame.refreshed for frame in frames] == [START + timedelta(minutes=30 * index) for index in range(3)]
     assert [frame.alternate for frame in frames] == [False, True, False]
     assert all(frame.overlay is None for frame in frames)
-    assert app.stop.waits == [1800, 1800, 1800]
+    assert app.signals.waits == [1800, 1800, 1800]
 
 
 def test_stop_draws_the_stopped_frame_and_logs_out(config_dir):
@@ -109,7 +114,7 @@ def test_failure_shows_no_data_once_and_retries_every_minute(config_dir):
     assert [frame.overlay.title if frame.overlay else None for frame in frames] == [None, 'No data']
     assert frames[1].overlay.detail == 'since 12:00'
     assert frames[1].pihole == demo_pihole()
-    assert app.stop.waits == [1800, 60, 60, 60]
+    assert app.signals.waits == [1800, 60, 60, 60]
 
 
 def test_recovery_redraws_without_waiting_for_the_interval(config_dir):
@@ -124,7 +129,30 @@ def test_redraws_early_while_pihole_is_still_loading_its_history(config_dir):
     app, client, frames = run(config_dir, [demo_pihole(uptime_seconds=120), demo_pihole()], rounds=2)
 
     assert [frame.refreshed for frame in frames] == [START, START + timedelta(seconds=480)]
-    assert app.stop.waits == [480, 1800]
+    assert app.signals.waits == [480, 1800]
+
+
+def test_redraw_request_draws_without_waiting_for_the_interval(config_dir):
+    app, client, frames = run(config_dir, [demo_pihole()], rounds=2, redraws=[False, True], wake_after=100)
+
+    assert [frame.refreshed for frame in frames] == [START, START + timedelta(seconds=100)]
+    assert all(frame.overlay is None for frame in frames)
+
+
+def test_signals_keep_a_redraw_request_until_it_is_taken():
+    signals = Signals()
+
+    signals.request_redraw()
+    signals.wait(60)
+
+    assert signals.take_redraw()
+    assert not signals.take_redraw()
+    assert not signals.stopping
+
+    signals.stop()
+    signals.wait(60)
+
+    assert signals.stopping
 
 
 def test_blocking_off_shows_until_or_since(config_dir):
@@ -174,5 +202,5 @@ def test_pick_phrase_falls_back_when_nothing_fits():
     assert pick_phrase([], 12431) == FALLBACK_PHRASE
 
 
-def test_stop_event_default_is_a_threading_event(config_dir):
-    assert isinstance(App(config_dir, Display()).stop, threading.Event)
+def test_signals_default_to_real_ones(config_dir):
+    assert isinstance(App(config_dir, Display()).signals, Signals)
