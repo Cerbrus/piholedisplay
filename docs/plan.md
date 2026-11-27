@@ -22,20 +22,21 @@ Decision 2 named a Python virtual environment. There is none: Pillow, `spidev` a
 - systemd units, `deploy/update.sh` and `install.sh`.
 - Icon legend generated from the icon bitmaps.
 
+## Verified on the Pi (2026-11-27)
+
+The Pi was reinstalled with Raspberry Pi OS Lite 32-bit (Debian 13, Python 3.13, Pillow 11.1) on a second SD card; the old card is the rollback.
+
+- `install.sh` ran clean on the fresh system.
+- The display draws, and signs in to the live API with the CLI password.
+- The `deploy` job created the `deploy` branch after the first green run on `master`.
+- `rpi-lgpio` needed one change in the vendored driver: `epdif.py` set up the SPI chip-select pin (GPIO 8) as an output. The kernel's SPI driver owns that pin, and `lgpio` refuses to claim it where `RPi.GPIO` did not check. The line is removed; the SPI driver toggles chip select by itself.
+
 ## Not verified yet
 
-- **On the display.** Everything was rendered to PNG; the code has not run on the Pi. The vendored Waveshare driver is unchanged, and `rpi-lgpio` standing in for `RPi.GPIO` under it is untested.
-- **Against the live API.** The client is tested against the response shapes read from the Pi-hole on 2026-11-27, not against the running API.
-- **`install.sh` and `deploy/update.sh`.** They pass `shellcheck` in CI but have never run.
-- **The `deploy` job.** Lint, tests and demo render ran green on the pull request; the fast-forward of `deploy` only runs on `master`.
+- **`deploy/update.sh`.** It passes `shellcheck`; the first deploy after the reinstall is its first real run.
 - **CLI password sessions being read-only**, as the Pi-hole documentation describes them.
+- **The "Stopped" frame and the overlays on the real panel.** Seen as PNG only.
 
-## Still to do
+## Later
 
-1. Push the branch, get CI green, merge to `master`; check that `deploy` appears.
-2. Reinstall the Pi. Pi-hole on it is the only DNS server the modem hands out, so the whole house loses DNS while it is down:
-   - Export a Teleporter backup and copy `/etc/pihole/pihole.toml` off the Pi.
-   - Flash Raspberry Pi OS Lite 32-bit, same host name, same address (192.168.1.104 is bound in the modem), SSH key.
-   - Install Pi-hole, import the Teleporter backup, check the `misc.dnsmasq_lines` split-horizon entries.
-   - Clone this repository and run `sudo ./install.sh`.
-3. Watch the first refreshes with `journalctl -fu pihole-display` and tick off the list above.
+- **Panel wear at the edges.** The panel shows degradation around the edges, most where the old layout drew a black border for years. The new layout has no border, but its three lines, the icons and the footer also never move. To look into: a full clearing cycle (all white, all black, all red) once a night, shifting the whole picture by a pixel now and then, and whether the damage is reversible with a few clearing cycles at all.

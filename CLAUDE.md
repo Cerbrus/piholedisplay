@@ -29,7 +29,7 @@ piholedisplay/model.py     PiholeStats, SystemStats, Overlay, Frame
 piholedisplay/display.py   EpaperDisplay (the HAT) and PngDisplay (a file)
 piholedisplay/demo.py      fake frames for every state, icon legend generator
 piholedisplay/config.py    config.json with config.local.json laid over it
-piholedisplay/lib/         Waveshare driver (epd2in13b.py, epdif.py): vendored, do not edit
+piholedisplay/lib/         Waveshare driver (epd2in13b.py, epdif.py): vendored, leave alone
 piholedisplay/fonts/       DejaVu Sans Mono, bundled so every machine renders the same
 deploy/                    systemd unit templates, update.sh (timer), install-units.sh
 install.sh                 one-time setup on the Pi
@@ -47,6 +47,7 @@ tests/                     pytest; tests/fixtures/pihole.json has real v6 respon
 
 ## Things to know before changing code
 
+- **GPIO goes through `rpi-lgpio`**, the `RPi.GPIO` stand-in on current Raspberry Pi OS. It refuses pins the kernel already owns: the vendored `epdif.py` differs from upstream by one removed line, the setup of the SPI chip-select pin.
 - **Python 3.11+, Pillow 9.4+** (what Raspberry Pi OS Bookworm ships). There are no other runtime dependencies; HTTP goes through `urllib`.
 - **Pi-hole API is v6**: `POST /api/auth` with the password from `/etc/pihole/cli_pw`, then `stats/summary`, `history`, `dns/blocking`, `info/messages/count`, `info/version` with the `X-FTL-SID` header. Pi-hole allows 16 sessions: the client keeps one, logs in again on a 401 and logs out on exit.
 - **Layout is pixel-exact and was agreed in mockup rounds.** After a change to `screen.py` or `icons.py`, run `--demo docs` and look at the pictures.
