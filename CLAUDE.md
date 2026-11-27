@@ -44,7 +44,7 @@ tests/                     pytest; tests/fixtures/pihole.json has real v6 respon
 - `SIGUSR1` asks for a redraw now; the unit maps `systemctl reload pihole-display` to it.
 - `render(frame)` is a pure function from a `Frame` to a `Canvas`. Everything on screen is addressed as `'black'` or `'red'`; the two 1-bit layers must never share a pixel (a test checks this).
 - Every second refresh has `frame.alternate` set, which swaps the two lower grid rows.
-- `FrameServer` answers `/screen.png` from `App.png`: a frame of its own (fresh fetch, own phrase, own alternation), drawn again when the last one is older than `http.max_age_seconds`. It runs in a thread; `App.lock` guards the Pi-hole client and the statistics, and is not held while the panel refreshes.
+- `FrameServer` answers `/screen.png` from `App.png`: a frame of its own (fresh fetch, own phrase, own alternation), drawn again when the last one is older than `http.max_age_seconds` or the request has `?refresh=1`. It runs in a thread; `App.lock` guards the Pi-hole client and the statistics, and is not held while the panel refreshes.
 - `corner_padding` moves the refresh time away from the bottom-right corner, for a worn panel. It is off by default and applies to the panel only, never to the picture for Home Assistant.
 - Overlays, in order of precedence: "Stopped" (on exit), "No data" (fetch failed), "Blocking off".
 - The canvas is landscape, 212 x 104. `EpaperDisplay` rotates it for the portrait panel; `draw_inverted` picks the direction.

@@ -1,3 +1,5 @@
+import math
+
 from .canvas import WIDTH, Canvas, text_width
 
 DIVIDER_X = 99
@@ -63,15 +65,14 @@ def fit(message, width, size=10):
 
 
 def chart_columns(history, count):
-    if not history:
-        return [], 0
-    per_column = max(1, len(history) // count)
-    used = history[-count * per_column :]
-    columns = [
-        (sum(total for total, _ in chunk), sum(blocked for _, blocked in chunk))
-        for chunk in (used[index : index + per_column] for index in range(0, len(used), per_column))
-    ]
-    return columns, per_column
+    count = min(count, len(history))
+    columns = []
+    for column in range(count):
+        start, end = column * len(history) / count, (column + 1) * len(history) / count
+        buckets = range(int(start), min(math.ceil(end), len(history)))
+        shares = [(min(end, index + 1) - max(start, index), history[index]) for index in buckets]
+        columns.append(tuple(sum(share * entry[part] for share, entry in shares) for part in (0, 1)))
+    return columns
 
 
 def render(frame, corner_padding=0):
@@ -138,22 +139,22 @@ def _grid(canvas, frame):
 
 
 def _chart(canvas, history):
-    columns, per_column = chart_columns(history, CHART_WIDTH // BAR_STEP)
+    columns = chart_columns(history, CHART_WIDTH // BAR_STEP)
     peak = max((total for total, _ in columns), default=0)
     if not peak:
         return 0
     bottom = CHART_TOP + CHART_HEIGHT
     for index, (total, blocked) in enumerate(columns):
         left = CHART_LEFT + index * BAR_STEP
-        total_height = total * CHART_HEIGHT // peak
-        blocked_height = blocked * CHART_HEIGHT // peak
+        total_height = int(total * CHART_HEIGHT / peak)
+        blocked_height = int(blocked * CHART_HEIGHT / peak)
         if total_height > blocked_height:
             canvas.box((left, bottom - total_height, left + BAR_WIDTH - 1, bottom - blocked_height - 1))
         if blocked_height:
             canvas.box((left, bottom - blocked_height, left + BAR_WIDTH - 1, bottom), 'red')
         elif total_height:
             canvas.box((left, bottom, left + BAR_WIDTH - 1, bottom))
-    return round(len(columns) * per_column / 6)
+    return round(len(history) / 6)
 
 
 def _footer(canvas, frame, hours, stamp_right):

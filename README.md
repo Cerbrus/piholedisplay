@@ -4,7 +4,7 @@ Pi-hole and system statistics on a Waveshare 2.13 inch three-colour e-paper disp
 
 ![The screen](docs/screens/normal-1.png)
 
-The top left shows the share of today's queries that was blocked, with the count under it. The grid on the right holds clients, queries per minute, blocklist size and CPU temperature; its lower rows alternate on every refresh between IP address, memory and disk, and host name, blocklist age and WiFi signal. The chart shows the last 23 hours, blocked queries in red. [docs/icons.md](docs/icons.md) explains every icon.
+The top left shows the share of today's queries that was blocked, with the count under it. The grid on the right holds clients, queries per minute, blocklist size and CPU temperature; its lower rows alternate on every refresh between IP address, memory and disk, and host name, blocklist age and WiFi signal. The chart shows the last 24 hours, blocked queries in red. [docs/icons.md](docs/icons.md) explains every icon.
 
 A red bar over the chart reports a state that needs attention:
 
@@ -20,7 +20,7 @@ Red markers under the percentage appear only when there is something to report: 
 
 ## Home Assistant
 
-The display also serves its screen as a picture, at `http://<address of the Pi>:8081/screen.png`. A request draws a new frame with fresh numbers when the last one is older than 2 minutes, so the picture is more recent than the panel, with its own phrase and its own turn of the alternating grid rows.
+The display also serves its screen as a picture, at `http://<address of the Pi>:8081/screen.png`. A request draws a new frame with fresh numbers when the last one is older than 2 minutes, so the picture is more recent than the panel, with its own phrase and its own turn of the alternating grid rows. `/screen.png?refresh=1` draws a new frame at once.
 
 In Home Assistant, add the **Generic Camera** integration with that address as still image URL, and show the camera in a picture entity card. Port and maximum age are settings: see [docs/configuration.md](docs/configuration.md).
 
