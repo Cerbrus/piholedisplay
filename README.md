@@ -41,6 +41,7 @@ sudo ./install.sh
 ```bash
 journalctl -fu pihole-display          # follow the display
 systemctl list-timers pihole-display-update.timer
+sudo systemctl reload pihole-display   # redraw now, without waiting for the next refresh
 sudo systemctl stop pihole-display     # draws the "Stopped" frame
 ```
 

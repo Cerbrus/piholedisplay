@@ -1,10 +1,9 @@
 import argparse
 import logging
 import signal
-import threading
 from pathlib import Path
 
-from .app import App
+from .app import App, Signals
 from .demo import write_demo
 from .display import EpaperDisplay, PngDisplay
 
@@ -21,12 +20,14 @@ def main(argv=None):
         return
 
     logging.basicConfig(format='%(levelname)s %(name)s: %(message)s')
-    stop = threading.Event()
+    signals = Signals()
     for signum in (signal.SIGINT, signal.SIGTERM):
-        signal.signal(signum, lambda *_: stop.set())
+        signal.signal(signum, signals.stop)
+    if hasattr(signal, 'SIGUSR1'):
+        signal.signal(signal.SIGUSR1, signals.request_redraw)
 
     display = PngDisplay(args.preview) if args.preview else EpaperDisplay()
-    App(args.config_dir, display, once=bool(args.preview), stop=stop).run()
+    App(args.config_dir, display, once=bool(args.preview), signals=signals).run()
 
 
 if __name__ == '__main__':

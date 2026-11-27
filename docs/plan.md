@@ -46,3 +46,4 @@ Found on the real hardware and fixed:
 ## Later
 
 - **Panel wear at the edges.** The panel shows degradation around the edges, most where the old layout drew a black border for years. The new layout has no border, but its three lines, the icons and the footer also never move. To look into: a full clearing cycle (all white, all black, all red) once a night, shifting the whole picture by a pixel now and then, and whether the damage is reversible with a few clearing cycles at all.
+- **The screen in Home Assistant.** Show what the panel shows in a Home Assistant card. Two routes: the display serves its last frame as a PNG on a small HTTP endpoint, for a picture card or a generic camera entity; or it serves the numbers as JSON, for a card built in Home Assistant itself. The image route keeps one layout for panel and dashboard.
