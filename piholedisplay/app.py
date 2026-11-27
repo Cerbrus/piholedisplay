@@ -13,6 +13,7 @@ from .system import read_system
 log = logging.getLogger(__name__)
 
 FALLBACK_PHRASE = 'Blocked'
+SETTLE_SECONDS = 600
 
 
 def pick_phrase(phrases, blocked, rng=random):
@@ -61,7 +62,7 @@ class App:
                 ok = self._fetch(now)
                 if next_render is None or now >= next_render or ok != was_ok:
                     self._show(self._frame(now, ok))
-                    next_render = now + timedelta(minutes=self.config.interval_minutes)
+                    next_render = self._next_render(now, ok)
                 was_ok = ok
                 if self.once or self.config.interval_minutes <= 0:
                     return
@@ -71,6 +72,13 @@ class App:
                 self.stop.wait(max(wait, 1))
         finally:
             self._shutdown()
+
+    def _next_render(self, now, ok):
+        scheduled = now + timedelta(minutes=self.config.interval_minutes)
+        settling = SETTLE_SECONDS - self.stats.uptime_seconds if ok else 0
+        if settling > 0:
+            return min(scheduled, now + timedelta(seconds=settling))
+        return scheduled
 
     def _fetch(self, now):
         key = (self.config.api_url, self.config.password_file)

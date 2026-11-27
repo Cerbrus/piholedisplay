@@ -1145,5 +1145,20 @@
       }
     },
     "took": 0.0004699230194091797
+  },
+  "info/ftl": {
+    "ftl": {
+      "privacy_level": 0,
+      "query_frequency": 0.5,
+      "clients": {
+        "total": 25,
+        "active": 23
+      },
+      "pid": 460,
+      "uptime": 3373431.5,
+      "%mem": 25.1,
+      "%cpu": 1.3
+    },
+    "took": 0.0012
   }
 }
