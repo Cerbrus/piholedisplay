@@ -74,6 +74,16 @@ def test_bottom_right_corner_stays_empty():
         assert ink(canvas.red, corner) == 0
 
 
+def test_edge_stamp_ends_at_the_right_margin_and_changes_nothing_else():
+    panel, edge = screen.render(FRAMES['normal-1']), screen.render(FRAMES['normal-1'], screen.EDGE_STAMP_RIGHT)
+    above = (0, 0, WIDTH, screen.FOOTER_Y - 1)
+    margin = (screen.EDGE_STAMP_RIGHT, 0, WIDTH, HEIGHT)
+
+    assert ink(edge.black, (screen.STAMP_RIGHT, screen.FOOTER_Y - 1, screen.EDGE_STAMP_RIGHT, HEIGHT))
+    assert ink(edge.black, margin) == 0
+    assert panel.black.crop(above).tobytes() == edge.black.crop(above).tobytes()
+
+
 def test_alternate_frame_changes_only_the_lower_grid_rows():
     first, second = screen.render(FRAMES['normal-1']), screen.render(FRAMES['normal-2'])
     upper = (screen.GRID_LEFT, 0, WIDTH, 24)

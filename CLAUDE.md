@@ -27,6 +27,7 @@ piholedisplay/canvas.py    Canvas: a black and a red 1-bit image, text, icons, R
 piholedisplay/icons.py     9 x 9 icon bitmaps with their meaning
 piholedisplay/model.py     PiholeStats, SystemStats, Overlay, Frame
 piholedisplay/display.py   EpaperDisplay (the HAT) and PngDisplay (a file)
+piholedisplay/web.py       FrameServer: the screen as /screen.png over HTTP, for Home Assistant
 piholedisplay/demo.py      fake frames for every state, icon legend generator
 piholedisplay/config.py    config.json with config.local.json laid over it
 piholedisplay/lib/         Waveshare driver (epd2in13b.py, epdif.py): vendored, leave alone
@@ -43,6 +44,8 @@ tests/                     pytest; tests/fixtures/pihole.json has real v6 respon
 - `SIGUSR1` asks for a redraw now; the unit maps `systemctl reload pihole-display` to it.
 - `render(frame)` is a pure function from a `Frame` to a `Canvas`. Everything on screen is addressed as `'black'` or `'red'`; the two 1-bit layers must never share a pixel (a test checks this).
 - Every second refresh has `frame.alternate` set, which swaps the two lower grid rows.
+- `FrameServer` answers `/screen.png` from `App.png`: a frame of its own (fresh fetch, own phrase, own alternation), drawn again when the last one is older than `http.max_age_seconds`. It runs in a thread; `App.lock` guards the Pi-hole client and the statistics, and is not held while the panel refreshes.
+- The panel keeps its bottom-right corner empty (`STAMP_RIGHT`); the picture for Home Assistant puts the refresh time against the margin (`EDGE_STAMP_RIGHT`).
 - Overlays, in order of precedence: "Stopped" (on exit), "No data" (fetch failed), "Blocking off".
 - The canvas is landscape, 212 x 104. `EpaperDisplay` rotates it for the portrait panel; `draw_inverted` picks the direction.
 - Deploy is pull-based: CI fast-forwards the `deploy` branch after a green run on `master`, `deploy/update.sh` on the Pi resets the checkout to it and restarts the service.

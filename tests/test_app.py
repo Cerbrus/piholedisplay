@@ -1,11 +1,15 @@
+import io
 import json
 import random
 from datetime import datetime, timedelta
 from pathlib import Path
 
 import pytest
+from PIL import Image
 
-from piholedisplay.app import FALLBACK_PHRASE, App, Signals, pick_phrase
+from piholedisplay import screen
+from piholedisplay.app import FALLBACK_PHRASE, SNAPSHOT_SCALE, App, Signals, pick_phrase
+from piholedisplay.canvas import HEIGHT, WIDTH
 from piholedisplay.config import load_config
 from piholedisplay.demo import demo_pihole, demo_system
 from piholedisplay.pihole import PiholeError
@@ -66,6 +70,16 @@ class Client:
         self.closed = True
 
 
+class Server:
+    def __init__(self, port, produce):
+        self.port = port
+        self.produce = produce
+        self.closed = False
+
+    def close(self):
+        self.closed = True
+
+
 @pytest.fixture
 def config_dir(tmp_path):
     (tmp_path / 'config.json').write_text((ROOT / 'config.json').read_text())
@@ -81,6 +95,7 @@ def run(config_dir, results, rounds, redraws=(), wake_after=None, **options):
         Display(),
         client_factory=lambda *_: client,
         system_reader=demo_system,
+        server_factory=Server,
         clock=clock,
         signals=FakeSignals(clock, rounds, redraws, wake_after),
         rng=random.Random(1),
@@ -200,6 +215,70 @@ def test_shipped_phrases_are_unique_and_fit_a_six_digit_count():
 def test_pick_phrase_falls_back_when_nothing_fits():
     assert pick_phrase(['Defenestrated with prejudice'], 12431) == FALLBACK_PHRASE
     assert pick_phrase([], 12431) == FALLBACK_PHRASE
+
+
+def test_serves_the_screen_on_the_configured_port_until_it_stops(config_dir):
+    app, client, frames = run(config_dir, [demo_pihole()], rounds=2)
+
+    assert app.server.port == 8081
+    assert app.server.produce == app.png
+    assert app.server.closed
+
+
+def test_port_zero_serves_nothing(config_dir):
+    (config_dir / 'config.local.json').write_text(json.dumps({'http': {'port': 0}}))
+
+    app, client, frames = run(config_dir, [demo_pihole()], rounds=2)
+
+    assert app.server is None
+
+
+def test_changed_port_moves_the_server(config_dir):
+    app, client, frames = run(config_dir, [demo_pihole()], rounds=1)
+    first = app.server
+    (config_dir / 'config.local.json').write_text(json.dumps({'http': {'port': 8082}}))
+    app.config = load_config(config_dir)
+
+    app._serve()
+
+    assert first.closed
+    assert app.server.port == 8082
+
+
+def test_png_is_a_fresh_frame_with_the_stamp_at_the_right_margin(config_dir):
+    app, client, frames = run(config_dir, [demo_pihole(), demo_pihole(clients=99)], rounds=1)
+    app.clock.now += timedelta(minutes=7)
+
+    with Image.open(io.BytesIO(app.png())) as image:
+        corner = image.crop(tuple(SNAPSHOT_SCALE * edge for edge in (screen.STAMP_RIGHT, screen.FOOTER_Y, WIDTH, HEIGHT)))
+
+        assert image.size == (WIDTH * SNAPSHOT_SCALE, HEIGHT * SNAPSHOT_SCALE)
+        assert corner.getextrema() != ((255, 255), (255, 255), (255, 255))
+    assert app.stats.clients == 99
+    assert app.refreshes == 1
+
+
+def test_png_is_rendered_again_only_after_the_maximum_age(config_dir):
+    app, client, frames = run(config_dir, [demo_pihole()], rounds=1)
+
+    first = app.png()
+    app.clock.now += timedelta(seconds=119)
+    second = app.png()
+    app.clock.now += timedelta(seconds=1)
+    third = app.png()
+
+    assert second is first
+    assert third is not first
+    assert app.snapshots == 2
+
+
+def test_png_shows_no_data_while_pihole_is_down(config_dir):
+    app, client, frames = run(config_dir, [demo_pihole(), PiholeError('down')], rounds=1)
+
+    app.png()
+
+    assert app._overlay(False).title == 'No data'
+    assert app.stats == demo_pihole()
 
 
 def test_signals_default_to_real_ones(config_dir):

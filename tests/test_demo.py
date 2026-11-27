@@ -3,7 +3,7 @@ from pathlib import Path
 from PIL import Image
 
 from piholedisplay.canvas import HEIGHT, WIDTH
-from piholedisplay.demo import SCREEN_SCALE, demo_frames, icons_markdown, write_demo
+from piholedisplay.demo import HOME_ASSISTANT, SCREEN_SCALE, demo_frames, icons_markdown, write_demo
 from piholedisplay.icons import ICONS
 
 ROOT = Path(__file__).parent.parent
@@ -20,7 +20,7 @@ def test_every_icon_has_a_committed_picture():
 def test_write_demo_creates_screens_icons_and_the_legend(tmp_path):
     write_demo(tmp_path)
 
-    assert {path.stem for path in (tmp_path / 'screens').glob('*.png')} == set(demo_frames())
+    assert {path.stem for path in (tmp_path / 'screens').glob('*.png')} == {*demo_frames(), HOME_ASSISTANT}
     assert {path.stem for path in (tmp_path / 'icons').glob('*.png')} == set(ICONS)
     assert (tmp_path / 'icons.md').read_text(encoding='utf-8') == icons_markdown()
     with Image.open(tmp_path / 'screens' / 'normal-1.png') as image:
